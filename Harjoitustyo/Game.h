@@ -14,7 +14,9 @@ public:
 
     void run();
     void push_state(GameState* state);
+    void pop_state();
     GameState* peek();
+    void set_view(sf::View &view);
 
 private:
     sf::RenderWindow window;

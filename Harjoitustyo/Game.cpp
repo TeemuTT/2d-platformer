@@ -3,15 +3,14 @@
 
 Game::Game()
 {
-    window.create(sf::VideoMode(480, 360), "SFML");
-    window.setFramerateLimit(60);
+    window.create(sf::VideoMode(640, 480), "SFML");
+    window.setFramerateLimit(60);    
 }
 
 Game::~Game()
 {
     while (states.size() != 0) {
-        delete states.top();
-        states.pop();
+        pop_state();
     }
     std::cout << "Game destroyed\n";
 }
@@ -19,6 +18,12 @@ Game::~Game()
 void Game::push_state(GameState* state)
 {
     states.push(state);
+}
+
+void Game::pop_state()
+{
+    delete states.top();
+    states.pop();
 }
 
 GameState* Game::peek()
@@ -42,10 +47,19 @@ void Game::run()
             window.close();
             break;
         }
+        else if (state->isDestroyed()) {
+            pop_state();
+            continue;
+        }
         state->update();
 
         window.clear();
         state->draw(window);
         window.display();
     }
+}
+
+void Game::set_view(sf::View &view)
+{
+    window.setView(view);
 }

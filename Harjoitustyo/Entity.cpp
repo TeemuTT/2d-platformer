@@ -18,10 +18,12 @@ int Entity::top()
 {
     return sprite.getPosition().y;
 }
+
 int Entity::right()
 {
     return sprite.getPosition().x + sprite.getScale().x;
 }
+
 int Entity::bottom()
 {
     return sprite.getPosition().y + sprite.getScale().y;
