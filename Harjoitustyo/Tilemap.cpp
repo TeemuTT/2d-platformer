@@ -1,19 +1,20 @@
 
 #include "Tilemap.h"
+#include <iostream>
 
 Tilemap::Tilemap()
 {
     states.texture = &tileset;
 }
 
-bool Tilemap::load(const std::string &filename, sf::Vector2u tileSize, int width, int height)
+bool Tilemap::load(sf::Vector2u tileSize, int width, int height)
 {
-    if (!tileset.loadFromFile(filename)) return false;
+    if (!tileset.loadFromFile("../Debug/tileset.png")) return false;
 
     using namespace rapidxml;
 
     xml_document<> doc;
-    file<> xmlFile("../Debug/map.tmx");
+    file<> xmlFile("../Debug/map2.tmx");
     doc.parse<0>(xmlFile.data());
     xml_node<> *root = doc.first_node("map");
     xml_node<> *tile = root->first_node("layer");
@@ -63,14 +64,23 @@ bool Tilemap::load(const std::string &filename, sf::Vector2u tileSize, int width
             tiles.emplace_back(x, y);
         }
     }
+    return true;
 }
 
 void Tilemap::draw(sf::RenderWindow &window)
 {    
     window.draw(vertices, states);
+    //for (Tile t : tiles) {
+    //    window.draw(t.getShape());
+    //}
 }
 
 void Tilemap::update()
 {
+    return;
+}
 
+std::vector<Tile> Tilemap::getTiles()
+{
+    return tiles;
 }

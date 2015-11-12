@@ -1,16 +1,20 @@
 
 #include "GameScreen.h"
-#include "Tilemap.h"
+#include "Player.h"
+#include "Enemy.h"
 
 GameScreen::GameScreen(Game* game)
 {
     destroyed = false;
     this->game = game;
-    Tilemap *map = new Tilemap;
-    map->load("../Debug/Image3.png", sf::Vector2u(16, 16), 50, 25);
-    entities.push_back(map);
+    map.load(sf::Vector2u(32, 32), 40, 20);
+    entities.push_back(new Player(96, 448, 50, 64, this));
 
-    view = sf::View{ sf::Vector2f(320, 240), sf::Vector2f(240, 240) };
+    entities.push_back(new Enemy(1156, 352, 32, 64, this));
+    entities.push_back(new Enemy(608, 64, 32, 64, this));
+    entities.push_back(new Enemy(576, 448, 32, 64, this));
+
+    view = sf::View{ sf::Vector2f(320, 240), sf::Vector2f(640, 480) };
 }
 
 GameScreen::~GameScreen()
@@ -25,29 +29,35 @@ GameScreen::~GameScreen()
 
 void GameScreen::update()
 {
-    // Testing
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        view.setCenter(sf::Vector2f(view.getCenter().x - 2, view.getCenter().y));
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        view.setCenter(sf::Vector2f(view.getCenter().x + 2, view.getCenter().y));
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        view.setCenter(sf::Vector2f(view.getCenter().x, view.getCenter().y + 2));
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        view.setCenter(sf::Vector2f(view.getCenter().x, view.getCenter().y - 2));
-    }    
-    game->set_view(view);
-
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
         destroyed = true;
     }
+    for (Entity *e : entities) {
+        e->update();
+        if (Player *p = dynamic_cast<Player*>(e)) {
+            view.setCenter(p->getOrigin());
+            game->set_view(view);
+        }
+    }
+
+    // Erase-remove idiom
+    // https://en.wikipedia.org/wiki/Erase%E2%80%93remove_idiom
+    entities.erase( std::remove_if(std::begin(entities), std::end(entities),
+                    [](Entity* entity) { return entity->isDestroyed(); }),
+                    std::end(entities));
+
+    for (Entity *e : queue) {
+        entities.push_back(std::move(e));
+    }
+    queue.clear();
 }
 
 void GameScreen::draw(sf::RenderWindow &window)
 {    
+    map.draw(window);
     for (Entity *e : entities) {
         e->draw(window);
     }
 }
+
+

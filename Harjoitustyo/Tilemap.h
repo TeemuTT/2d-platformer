@@ -9,16 +9,17 @@
 #include "rapidxml.hpp"
 #include "rapidxml_utils.hpp"
 
-#include "Entity.h"
 #include "Tile.h"
 
-class Tilemap : public Entity
+class Tilemap
 {
 public:
     Tilemap();
-    bool load(const std::string &filename, sf::Vector2u tileSize, int width, int height);
-    virtual void draw(sf::RenderWindow &window);
-    virtual void update();
+    bool load(sf::Vector2u tileSize, int width, int height);
+    void draw(sf::RenderWindow &window);
+    void update();
+    std::vector<Tile> getTiles();
+
 private:
     std::vector<Tile> tiles;
     sf::RenderStates states;

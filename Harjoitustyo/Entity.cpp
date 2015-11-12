@@ -4,6 +4,13 @@
 
 #include <iostream>
 
+Entity::Entity(int x, int y, GameState* gamestate)
+{
+    this->x = x;
+    this->y = y;
+    this->gamestate = gamestate;
+}
+
 Entity::~Entity()
 {
     std::cout << "Entity destroyed.\n";
@@ -11,20 +18,60 @@ Entity::~Entity()
 
 int Entity::left()
 {
-    return sprite.getPosition().x;
+    return rect.getPosition().x;
 }
 
 int Entity::top()
 {
-    return sprite.getPosition().y;
+    return rect.getPosition().y;
 }
 
 int Entity::right()
 {
-    return sprite.getPosition().x + sprite.getScale().x;
+    return rect.getPosition().x + rect.getSize().x;
 }
 
 int Entity::bottom()
 {
-    return sprite.getPosition().y + sprite.getScale().y;
+    return rect.getPosition().y + rect.getSize().y;
+}
+
+sf::Vector2f Entity::getPosition()
+{
+    return rect.getPosition();
+}
+
+sf::Vector2f Entity::getOrigin()
+{
+    float x = rect.getPosition().x + rect.getSize().x / 2;
+    float y = rect.getPosition().y + rect.getSize().y / 2;
+    return sf::Vector2f(x, y);
+}
+
+bool Entity::isDestroyed()
+{
+    return destroyed;
+}
+
+bool Entity::collision(Entity *entity)
+{
+    if (getBounds().intersects(entity->getBounds())) {
+        return true;
+    }
+    return false;
+}
+
+sf::FloatRect Entity::getBounds()
+{
+    return rect.getGlobalBounds();
+}
+
+bool Entity::isCollidable()
+{
+    return collidable;
+}
+
+void Entity::destroy()
+{
+    destroyed = true;
 }

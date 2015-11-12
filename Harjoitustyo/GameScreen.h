@@ -11,10 +11,10 @@ public:
     ~GameScreen();
 
     virtual void update();
-    virtual void draw(sf::RenderWindow &window);
+    virtual void draw(sf::RenderWindow &window);    
+    
 private:
-    sf::View view;
-    std::vector<Entity*> entities;
+    sf::View view;    
 };
 
 #endif
