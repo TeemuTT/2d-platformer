@@ -6,6 +6,11 @@ Animation::Animation()
 
 }
 
+Animation::~Animation()
+{
+
+}
+
 Animation::Animation(std::string filename, int images, int w, int h, bool looping)
 {
     texture.loadFromFile(filename); 

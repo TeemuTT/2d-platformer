@@ -11,6 +11,7 @@ class Animation
 public:
     Animation();
     Animation(std::string filename, int images, int w, int h, bool looping);
+    ~Animation();
 
     sf::Texture* getTexture();
     sf::IntRect getTextureRect(float delta, bool flip);

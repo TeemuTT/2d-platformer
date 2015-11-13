@@ -1,3 +1,4 @@
+
 #include "Enemy.h"
 #include "Bullet.h"
 
@@ -5,9 +6,8 @@ Enemy::Enemy(int x, int y, float sizex, float sizey, GameState* gamestate) : Ent
 {
     rect.setSize(sf::Vector2f(sizex, sizey));
     rect.setPosition(x, y);
-
-    texture.loadFromFile("drill.png");
-    rect.setTexture(&texture);
+    
+    animation.create_animation("zappy.png", 4, 50, 50, AnimationHandler::IDLE, true);
 }
 
 Enemy::~Enemy()
@@ -25,6 +25,7 @@ void Enemy::update()
             }
         }
     }
+    animation.update(*this, 0, 0);
 }
 
 void Enemy::draw(sf::RenderWindow &window)
