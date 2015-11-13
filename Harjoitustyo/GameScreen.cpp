@@ -12,9 +12,9 @@ GameScreen::GameScreen(Game* game)
     map.load(sf::Vector2u(32, 32), 40, 20);
     entities.push_back(new Player(96, 448, 50, 64, this));
 
-    entities.push_back(new Enemy(1156, 352, 32, 64, this));
-    entities.push_back(new Enemy(608, 64, 32, 64, this));
-    entities.push_back(new Enemy(576, 448, 32, 64, this));
+    entities.push_back(new Enemy(1156, 352, 64, 64, this));
+    entities.push_back(new Enemy(608, 64, 64, 64, this));
+    entities.push_back(new Enemy(576, 448, 64, 64, this));
 
     view = sf::View{ sf::Vector2f(320, 240), sf::Vector2f(640, 480) };
 }
@@ -42,10 +42,17 @@ void GameScreen::update()
         }
     }
 
+    // Karsean näköinen...
     // Erase-remove idiom
     // https://en.wikipedia.org/wiki/Erase%E2%80%93remove_idiom
     entities.erase( std::remove_if(std::begin(entities), std::end(entities),
-                    [](Entity* entity) { return entity->isDestroyed(); }),
+                    [](Entity *entity) {
+                        if (entity->isDestroyed()) {
+                            delete entity;
+                            return true;
+                        }
+                        return false;
+                    }),
                     std::end(entities));
 
     for (Entity *e : queue) {

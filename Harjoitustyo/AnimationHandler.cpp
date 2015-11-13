@@ -49,6 +49,7 @@ void AnimationHandler::create_animation(std::string filename, int images, int w,
 {
     Animation animation{ filename, images, w, h, looping };
     animations.emplace(dir, animation);
+    
     switch (dir) {
     case RUN:
         has_run = true;
