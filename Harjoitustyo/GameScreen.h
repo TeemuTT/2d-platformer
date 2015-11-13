@@ -2,11 +2,12 @@
 #define __GAMESCREEN__
 
 #include "GameState.h"
+#include "Entity.h"
 
 class GameScreen : public GameState
 {
 public:
-    GameScreen();
+    GameScreen(Game* game);
     ~GameScreen();
 
     virtual void update();
