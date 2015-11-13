@@ -1,7 +1,6 @@
 
-#include <iostream>
-
 #include "AnimationHandler.h"
+#include "Entity.h"
 
 AnimationHandler::AnimationHandler()
 {
@@ -13,26 +12,35 @@ AnimationHandler::~AnimationHandler()
 
 }
 
-void AnimationHandler::update(sf::RectangleShape &rect, int heading, int vx, int vy)
+void AnimationHandler::update(Entity &entity, int vx, int vy)
 {
-    timer += clock.restart().asSeconds() * 10;
-    if (timer >= 10) timer = 0;
-    std::cout << "timer: " << timer << "\n";
+    float delta = clock.restart().asSeconds() * 10;
     
-    Direction dir = RIGHT;
-    if (vx > 0) dir = RIGHT;
-    else if (vx < 0) dir = LEFT;
+    Direction dir = IDLE;
+    if (vx > 0) {
+        left = false;
+        dir = RUN;
+    }
+    else if (vx < 0) {
+        left = true;
+        dir = RUN;
+    }
     else {
-        heading == 1 ? dir = IDLE_RIGHT : dir = IDLE_LEFT;
-        timer = 0;
+        dir = IDLE;
+    }
+    if (!entity.isGrounded()) {
+        dir = JUMP;
+    }
+    else {
+        animations.at(JUMP).reset();
     }
     
-    rect.setTexture(animations.at(dir).getTexture());
-    rect.setTextureRect(animations.at(dir).getTextureRect((int)timer));
+    entity.setTexture(animations.at(dir).getTexture());
+    entity.setTextureRect(animations.at(dir).getTextureRect(delta, left));
 }
 
-void AnimationHandler::create_animation(std::string filename, int images, int w, int h, Direction dir)
+void AnimationHandler::create_animation(std::string filename, int images, int w, int h, Direction dir, bool looping)
 {
-    Animation animation{ filename, images, w, h };
+    Animation animation{ filename, images, w, h, looping };
     animations.emplace(dir, animation);
 }

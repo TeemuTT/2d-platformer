@@ -19,6 +19,9 @@ public:
 
     bool isDestroyed();
     bool isCollidable();
+    bool isGrounded();
+    void setTexture(sf::Texture* texture);
+    void setTextureRect(sf::IntRect intrect);
     bool collision(Entity *entity);
     void destroy();
     sf::FloatRect getBounds();

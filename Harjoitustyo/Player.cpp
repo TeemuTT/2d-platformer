@@ -4,19 +4,13 @@
 
 Player::Player(int x, int y, float sizex, float sizey, GameState* gamestate) : Entity(x, y, gamestate)
 {
-    //rect.setFillColor(sf::Color::Green);
     rect.setPosition(x, y);
     rect.setSize(sf::Vector2f(sizex, sizey));
     collidable = true;
-    //texture.loadFromFile("right.png");
-
-    //rect.setTexture(animation.getTexture());
-    //rect.setTextureRect(animation.getTextureRect());
-
-    animation.create_animation("right.png", 10, 38, 38, AnimationHandler::RIGHT);
-    animation.create_animation("left.png", 10, 38, 38, AnimationHandler::LEFT);
-    animation.create_animation("idle_right.png", 1, 38, 38, AnimationHandler::IDLE_RIGHT);
-    animation.create_animation("idle_left.png", 1, 38, 38, AnimationHandler::IDLE_LEFT);
+    
+    animation.create_animation("run.png", 10, 38, 38, AnimationHandler::RUN, true);
+    animation.create_animation("idle.png", 1, 38, 38, AnimationHandler::IDLE, false);
+    animation.create_animation("jump.png", 4, 38, 38, AnimationHandler::JUMP, false);
 }
 
 Player::~Player()
@@ -72,7 +66,7 @@ void Player::handleinput()
         gamestate->add_entity(new Bullet(bx, by, sf::Vector2f(heading * BULLET_SPEED, 0), gamestate));
         spacetoggled = false;
     }
-    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) spacetoggled = true;    
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) spacetoggled = true;
 }
 
 void Player::handle_vertical()
@@ -121,7 +115,7 @@ void Player::update()
     handle_vertical();
     handleinput();
     rect.setPosition(x, y);
-    animation.update(rect, heading, vx, 0);
+    animation.update(*this, vx, vy);
 }
 
 void Player::draw(sf::RenderWindow &window)
