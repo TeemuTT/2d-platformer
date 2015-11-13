@@ -11,10 +11,7 @@ public:
     ~GameScreen();
 
     virtual void update();
-    virtual void draw(sf::RenderWindow &window);    
-    
-private:
-    sf::View view;    
+    virtual void draw(sf::RenderWindow &window);
 };
 
 #endif

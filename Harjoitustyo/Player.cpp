@@ -1,7 +1,6 @@
 
 #include "Player.h"
 #include "Bullet.h"
-#include <iostream>
 
 Player::Player(int x, int y, float sizex, float sizey, GameState* gamestate) : Entity(x, y, gamestate)
 {

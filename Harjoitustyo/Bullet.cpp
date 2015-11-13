@@ -7,7 +7,7 @@ Bullet::Bullet(int x, int y, sf::Vector2f velocity, GameState* gamestate) : Enti
     rect.setFillColor(sf::Color::Cyan);
     rect.setSize(sf::Vector2f(8, 8));
     rect.setPosition(sf::Vector2f(x, y));
-    tiles = gamestate->getTiles();
+    tiles = gamestate->getTiles(); // Ehkä ei näin.
 }
 
 Bullet::~Bullet()
@@ -17,25 +17,29 @@ Bullet::~Bullet()
 
 void Bullet::update()
 {
+    // Destroy bullet after some time.
     time += clock.restart().asSeconds();
-    if (time > 1.5F) {
-        destroyed = true;
-    }
-    rect.setPosition(rect.getPosition().x + velocity.x,
-                     rect.getPosition().y + velocity.y);
+    if (time > 1.5F) destroy();
+    
+    // Move.
+    x += velocity.x;
+    y += velocity.y;
+    rect.setPosition(x, y);
 
-    int cycles = 0;
+    // Destroy when bullet gets out of view.
+    sf::View &view = gamestate->getView();
+    int viewright = view.getCenter().x + view.getSize().x / 2;
+    int viewleft = view.getCenter().x - view.getSize().x / 2;
+    if (x < viewleft || x > viewright) destroy();
+
+    // Destroy when bullet hits a tile.
     for (Tile &t : tiles) {
         if (bottom() < t.top()) continue;
         if (top() > t.bottom()) continue;
         if (right() < t.left() - 32) continue;
         if (left() > t.right() + 32) continue;
-        cycles++;
-        if (getBounds().intersects(t.getShape().getGlobalBounds())) {
-            destroyed = true;
-        }
+        if (getBounds().intersects(t.getShape().getGlobalBounds())) destroy();
     }
-    std::cout << "cycles: " << cycles << "\n";
 }
 
 void Bullet::draw(sf::RenderWindow &window)
