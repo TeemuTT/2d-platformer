@@ -18,7 +18,6 @@ public:
     sf::Vector2f getOrigin();
 
     bool isDestroyed();
-    bool isCollidable();
     bool isGrounded();
     void setTexture(sf::Texture* texture);
     void setTextureRect(sf::IntRect intrect);
@@ -27,7 +26,7 @@ public:
     sf::FloatRect getBounds();
 
 protected:
-    bool destroyed;
+    bool destroyed{ false };
     sf::Texture texture;
     sf::RectangleShape rect;
 
@@ -36,9 +35,8 @@ protected:
 
     int x, y;
     float vx, vy;
-    bool grounded;
-    bool collidable;
-    int heading = 1;
+    bool grounded{ true };
+    int heading{ 1 };
 
     int left();
     int top();

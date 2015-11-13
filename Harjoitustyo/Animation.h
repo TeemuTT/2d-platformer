@@ -18,7 +18,7 @@ public:
     void reset();
 private:
     float timer;
-    bool looping = false;
+    bool looping{ false };
     sf::Texture texture;
     std::vector<sf::IntRect> frames;
 };

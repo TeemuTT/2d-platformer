@@ -6,7 +6,6 @@ Player::Player(int x, int y, float sizex, float sizey, GameState* gamestate) : E
 {
     rect.setPosition(x, y);
     rect.setSize(sf::Vector2f(sizex, sizey));
-    collidable = true;
     
     animation.create_animation("run.png", 10, 38, 38, AnimationHandler::RUN, true);
     animation.create_animation("idle.png", 1, 38, 38, AnimationHandler::IDLE, false);
@@ -27,7 +26,6 @@ void Player::handleinput()
         for (Tile t : tiles) {
             if (t.bottom() <= top()) continue;
             if (t.top() >= bottom()) continue;
-            //if (t.right() < left()) continue;
             if (t.left() >= right()) continue;
             int distance = t.right() - left();
             if (distance > maxpixels) maxpixels = distance;            
@@ -42,7 +40,6 @@ void Player::handleinput()
             if (t.bottom() <= top()) continue;
             if (t.top() >= bottom()) continue;
             if (t.right() <= left()) continue;
-            //if (t.left() >= right()) continue;
             int distance = t.left() - right();
             if (distance < maxpixels) maxpixels = distance;
         }
@@ -77,7 +74,6 @@ void Player::handle_vertical()
     if (vy < 0) {
         int maxpixels = INT_MIN;
         for (Tile t : tiles) {
-            //if (t.bottom() <= top()) continue;
             if (t.top() >= bottom()) continue;
             if (t.right() <= left()) continue;
             if (t.left() >= right()) continue;
@@ -94,7 +90,6 @@ void Player::handle_vertical()
     int maxpixels = INT_MAX;
     for (Tile t : tiles) {
         if (t.bottom() <= top()) continue;
-        //if (t.top() >= bottom()) continue;
         if (t.right() <= left()) continue;
         if (t.left() >= right()) continue;
         int distance = t.top() - bottom();

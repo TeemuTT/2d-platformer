@@ -25,8 +25,11 @@ public:
     void create_animation(std::string filename, int images, int w, int h, Direction dir, bool looping);
         
 private:
-    bool left = false;
-    sf::Clock clock; // ei ehkä näin
+    bool has_run{ false };
+    bool has_jump{ false };
+    bool has_idle{ false };
+    bool left{ false };
+    sf::Clock clock;
 
     std::map<Direction, Animation> animations;
 };
