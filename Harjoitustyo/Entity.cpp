@@ -66,12 +66,22 @@ sf::FloatRect Entity::getBounds()
     return rect.getGlobalBounds();
 }
 
-bool Entity::isCollidable()
-{
-    return collidable;
-}
-
 void Entity::destroy()
 {
     destroyed = true;
+}
+
+bool Entity::isGrounded()
+{
+    return grounded;
+}
+
+void Entity::setTexture(sf::Texture* texture)
+{
+    rect.setTexture(texture);
+}
+
+void Entity::setTextureRect(sf::IntRect intrect)
+{
+    rect.setTextureRect(intrect);
 }

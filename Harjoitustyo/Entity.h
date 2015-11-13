@@ -3,6 +3,7 @@
 
 #include "SFML\Graphics.hpp"
 #include "GameState.h"
+#include "AnimationHandler.h"
 
 class Entity
 {
@@ -17,23 +18,25 @@ public:
     sf::Vector2f getOrigin();
 
     bool isDestroyed();
-    bool isCollidable();
+    bool isGrounded();
+    void setTexture(sf::Texture* texture);
+    void setTextureRect(sf::IntRect intrect);
     bool collision(Entity *entity);
     void destroy();
     sf::FloatRect getBounds();
 
 protected:
-    bool destroyed;
+    bool destroyed{ false };
     sf::Texture texture;
     sf::RectangleShape rect;
 
     GameState* gamestate;
+    AnimationHandler animation;
 
     int x, y;
-    float vy;
-    bool grounded;
-    bool collidable;
-    int heading = 1;
+    float vx, vy;
+    bool grounded{ true };
+    int heading{ 1 };
 
     int left();
     int top();

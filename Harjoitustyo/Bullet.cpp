@@ -4,9 +4,12 @@
 Bullet::Bullet(int x, int y, sf::Vector2f velocity, GameState* gamestate) : Entity(x, y, gamestate)
 {
     this->velocity = velocity;
-    rect.setFillColor(sf::Color::Cyan);
-    rect.setSize(sf::Vector2f(8, 8));
+    rect.setSize(sf::Vector2f(12, 12));
     rect.setPosition(sf::Vector2f(x, y));
+
+    animation.create_animation("bullet.png", 1, 15, 15, AnimationHandler::IDLE, false);
+    animation.update(*this, 0, 0);
+
     tiles = gamestate->getTiles(); // Ehkä ei näin.
 }
 
@@ -36,10 +39,11 @@ void Bullet::update()
     for (Tile &t : tiles) {
         if (bottom() < t.top()) continue;
         if (top() > t.bottom()) continue;
-        if (right() < t.left() - 32) continue;
+        if (right() < t.left() - 32) continue; // magic number: tile size.
         if (left() > t.right() + 32) continue;
         if (getBounds().intersects(t.getShape().getGlobalBounds())) destroy();
     }
+    animation.update(*this, 0, 0);
 }
 
 void Bullet::draw(sf::RenderWindow &window)

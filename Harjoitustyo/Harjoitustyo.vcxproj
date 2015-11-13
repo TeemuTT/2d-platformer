@@ -123,6 +123,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationHandler.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -136,6 +138,11 @@
     <ClCompile Include="Tilemap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="AnimationHandler.h" />
     <ClInclude Include="Bullet.h">
       <SubType>
       </SubType>
