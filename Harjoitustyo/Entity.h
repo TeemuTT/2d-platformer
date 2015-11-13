@@ -3,6 +3,7 @@
 
 #include "SFML\Graphics.hpp"
 #include "GameState.h"
+#include "AnimationHandler.h"
 
 class Entity
 {
@@ -28,9 +29,10 @@ protected:
     sf::RectangleShape rect;
 
     GameState* gamestate;
+    AnimationHandler animation;
 
     int x, y;
-    float vy;
+    float vx, vy;
     bool grounded;
     bool collidable;
     int heading = 1;

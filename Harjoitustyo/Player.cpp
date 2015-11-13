@@ -8,8 +8,15 @@ Player::Player(int x, int y, float sizex, float sizey, GameState* gamestate) : E
     rect.setPosition(x, y);
     rect.setSize(sf::Vector2f(sizex, sizey));
     collidable = true;
-    texture.loadFromFile("megaman.png");
-    rect.setTexture(&texture);
+    //texture.loadFromFile("right.png");
+
+    //rect.setTexture(animation.getTexture());
+    //rect.setTextureRect(animation.getTextureRect());
+
+    animation.create_animation("right.png", 10, 38, 38, AnimationHandler::RIGHT);
+    animation.create_animation("left.png", 10, 38, 38, AnimationHandler::LEFT);
+    animation.create_animation("idle_right.png", 1, 38, 38, AnimationHandler::IDLE_RIGHT);
+    animation.create_animation("idle_left.png", 1, 38, 38, AnimationHandler::IDLE_LEFT);
 }
 
 Player::~Player()
@@ -21,7 +28,7 @@ void Player::handleinput()
 {
     auto &tiles = gamestate->getTiles(); // ei näin
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-        int dx = -SPEED;
+        vx = -SPEED;
         int maxpixels = INT_MIN;
         for (Tile t : tiles) {
             if (t.bottom() <= top()) continue;
@@ -31,11 +38,11 @@ void Player::handleinput()
             int distance = t.right() - left();
             if (distance > maxpixels) maxpixels = distance;            
         }
-        x += std::max(dx, maxpixels);
+        x += std::max((int)vx, maxpixels);
         heading = -1; // tmp for shooting
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-        int dx = SPEED;
+        vx = SPEED;
         int maxpixels = INT_MAX;
         for (Tile t : tiles) {
             if (t.bottom() <= top()) continue;
@@ -45,9 +52,12 @@ void Player::handleinput()
             int distance = t.left() - right();
             if (distance < maxpixels) maxpixels = distance;
         }
-        x += std::min(dx, maxpixels);
+        x += std::min((int)vx, maxpixels);
         heading = 1; // tmp for shooting
     }
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) vx = 0;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) vx = 0;
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && grounded && jumptoggled) {
         grounded = false;
         vy = JUMP_FORCE;
@@ -111,6 +121,7 @@ void Player::update()
     handle_vertical();
     handleinput();
     rect.setPosition(x, y);
+    animation.update(rect, heading, vx, 0);
 }
 
 void Player::draw(sf::RenderWindow &window)
