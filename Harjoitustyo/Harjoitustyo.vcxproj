@@ -132,8 +132,10 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="HighscoresScreen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="OptionsScreen.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Tile.cpp" />
@@ -150,6 +152,7 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="Enemy.h">
       <SubType>
       </SubType>
@@ -158,7 +161,9 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="HighscoresScreen.h" />
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="OptionsScreen.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Tile.h" />

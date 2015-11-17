@@ -19,8 +19,8 @@ public:
     void set_view(sf::View &view);
     void reset_view();
     sf::Window* get_window();
-private:
     sf::RenderWindow window;
+private:
     std::stack<GameState*> states;
 };
 

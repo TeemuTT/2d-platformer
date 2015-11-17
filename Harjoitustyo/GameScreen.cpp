@@ -32,6 +32,15 @@ GameScreen::~GameScreen()
 
 GameState* GameScreen::update()
 {
+    sf::Event event;
+    while (game->window.pollEvent(event)) {
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Escape) {
+                return new MainMenu(game);
+            }
+        }
+    }
+
     delta += clock.restart().asSeconds();
     fps++;
     if (delta >= 1) {
@@ -39,9 +48,7 @@ GameState* GameScreen::update()
         fps = 0;
         delta = 0;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-        return new MainMenu(game);
-    }
+    
     for (Entity *e : entities) {
         e->update();
         if (Player *p = dynamic_cast<Player*>(e)) {
