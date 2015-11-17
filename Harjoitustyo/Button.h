@@ -14,12 +14,12 @@ public:
     ~Button();
 
     void draw(sf::RenderWindow &window);
-    bool isClicked(sf::Vector2i point);
+    void set_focused(bool focused);
 
 private:
     sf::RectangleShape rect;
     sf::Text text;
-
+    bool focused{ false };
 };
 
 #endif

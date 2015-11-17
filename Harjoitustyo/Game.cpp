@@ -1,13 +1,14 @@
 
 #include <iostream>
 
+#include "Constants.h"
 #include "Game.h"
 #include "GameState.h"
 
 Game::Game()
 {
-    window.create(sf::VideoMode(640, 480), "SFML");
-    window.setFramerateLimit(60);
+    window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), TITLE);
+    window.setFramerateLimit(FPSLIMIT);
 
     //std::cout << "view: " << window.getView().getViewport().left << ", " << window.getView().getViewport().left << std::endl;
 }

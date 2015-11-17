@@ -2,6 +2,7 @@
 #define __MAINMENU__
 
 #include <string>
+#include <vector>
 #include "SFML/Graphics.hpp"
 #include "GameState.h"
 #include "Button.h"
@@ -16,15 +17,13 @@ public:
     virtual void draw(sf::RenderWindow &window);
 private:
     int selection{ 0 };
-    int options[4] = { 0, 1, 2, 3 };
+    std::vector<Button> buttons;
     sf::Font font;
     sf::Texture texture;
-    Button startButton;
-    Button optionsButton;
-    Button highscoresButton;
-    Button quitButton;
 
     bool escape_toggled{ false };
+    bool up_toggled{ false };
+    bool down_toggled{ false };
 };
 
 #endif
