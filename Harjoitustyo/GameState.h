@@ -13,7 +13,7 @@ class GameState
 public:
     virtual ~GameState();
 
-    virtual void update() = 0;
+    virtual GameState* update() = 0;
     virtual void draw(sf::RenderWindow &window) = 0;
 
     bool isDestroyed();

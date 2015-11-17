@@ -2,8 +2,6 @@
 
 #include "Entity.h"
 
-#include <iostream>
-
 Entity::Entity(int x, int y, GameState* gamestate)
 {
     this->x = x;
@@ -13,7 +11,7 @@ Entity::Entity(int x, int y, GameState* gamestate)
 
 Entity::~Entity()
 {
-    std::cout << "Entity destroyed.\n";
+
 }
 
 int Entity::left()

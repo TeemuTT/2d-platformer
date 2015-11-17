@@ -10,8 +10,12 @@ public:
     GameScreen(Game* game);
     ~GameScreen();
 
-    virtual void update();
+    virtual GameState* update();
     virtual void draw(sf::RenderWindow &window);
+private:
+    sf::Clock clock;
+    float delta;
+    int fps;
 };
 
 #endif

@@ -28,7 +28,7 @@ void Player::handleinput()
             if (t.top() >= bottom()) continue;
             if (t.left() >= right()) continue;
             int distance = t.right() - left();
-            if (distance > maxpixels) maxpixels = distance;            
+            if (distance > maxpixels) maxpixels = distance;
         }
         x += std::max((int)vx, maxpixels);
         heading = -1; // tmp for shooting
