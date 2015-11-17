@@ -9,7 +9,7 @@ HighscoresScreen::HighscoresScreen(Game *game)
     this->game = game;
     font.loadFromFile("HATTEN.ttf");
 
-    title.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - 60, 150));
+    title.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - 60, 40));
     title.setFont(font);
     title.setString("Highscores");
     title.setColor(sf::Color::White);

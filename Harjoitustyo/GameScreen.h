@@ -16,6 +16,13 @@ private:
     sf::Clock clock;
     float delta;
     int fps;
+
+    // Ei näin, testausta...
+    void load_level1();
+    void load_level2();
+    bool loadlevel1{ false };
+    bool loadlevel2{ false };
+    sf::FloatRect goal;
 };
 
 #endif

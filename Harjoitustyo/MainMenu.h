@@ -19,6 +19,7 @@ private:
     int selection{ 0 };
     std::vector<Button> buttons;
     sf::Font font;
+    sf::Text title;
     sf::Texture texture;
 
     bool escape_toggled{ false };

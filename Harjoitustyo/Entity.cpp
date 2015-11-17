@@ -83,3 +83,9 @@ void Entity::setTextureRect(sf::IntRect intrect)
 {
     rect.setTextureRect(intrect);
 }
+
+void Entity::setPosition(int x, int y)
+{
+    this->x = x;
+    this->y = y;
+}

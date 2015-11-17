@@ -19,6 +19,7 @@ public:
 
     bool isDestroyed();
     bool isGrounded();
+    void setPosition(int x, int y);
     void setTexture(sf::Texture* texture);
     void setTextureRect(sf::IntRect intrect);
     bool collision(Entity *entity);
