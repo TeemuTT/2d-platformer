@@ -7,7 +7,9 @@
 Game::Game()
 {
     window.create(sf::VideoMode(640, 480), "SFML");
-    window.setFramerateLimit(60);    
+    window.setFramerateLimit(60);
+
+    //std::cout << "view: " << window.getView().getViewport().left << ", " << window.getView().getViewport().left << std::endl;
 }
 
 Game::~Game()
@@ -27,6 +29,8 @@ void Game::pop_state()
 {
     delete states.top();
     states.pop();
+    window.setView(window.getDefaultView());
+    std::cout << "view: " << window.getView().getViewport().left << ", " << window.getView().getViewport().left << std::endl;
 }
 
 GameState* Game::peek()
@@ -54,7 +58,14 @@ void Game::run()
             pop_state();
             continue;
         }
-        state->update();
+        
+        GameState *state_ = state->update();
+        
+        if (state_ != nullptr) {
+            pop_state();
+            push_state(state_);
+            continue;
+        }
 
         window.clear();
         state->draw(window);
@@ -65,4 +76,14 @@ void Game::run()
 void Game::set_view(sf::View &view)
 {
     window.setView(view);
+}
+
+void Game::reset_view()
+{
+    window.setView(window.getDefaultView());
+}
+
+sf::Window* Game::get_window()
+{
+    return &window;
 }

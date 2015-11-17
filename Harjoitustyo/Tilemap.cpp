@@ -68,7 +68,7 @@ bool Tilemap::load(sf::Vector2u tileSize, int width, int height)
 }
 
 void Tilemap::draw(sf::RenderWindow &window)
-{    
+{
     window.draw(vertices, states);
     //for (Tile t : tiles) {
     //    window.draw(t.getShape());

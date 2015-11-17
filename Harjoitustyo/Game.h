@@ -17,7 +17,8 @@ public:
     void pop_state();
     GameState* peek();
     void set_view(sf::View &view);
-
+    void reset_view();
+    sf::Window* get_window();
 private:
     sf::RenderWindow window;
     std::stack<GameState*> states;

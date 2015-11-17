@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "GameScreen.h"
+#include "MainMenu.h"
 #include "Player.h"
 #include "Enemy.h"
 
@@ -24,15 +25,22 @@ GameScreen::~GameScreen()
     while (!entities.empty()) {
         delete entities.back();
         entities.pop_back();
-        std::cout << "deleted entity.\n";
+        //std::cout << "deleted entity.\n";
     }
     std::cout << "GameScreen destroyed\n";
 }
 
-void GameScreen::update()
+GameState* GameScreen::update()
 {
+    delta += clock.restart().asSeconds();
+    fps++;
+    if (delta >= 1) {
+        std::cout << "fps: " << fps << "\n";
+        fps = 0;
+        delta = 0;
+    }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-        destroyed = true;
+        return new MainMenu(game);
     }
     for (Entity *e : entities) {
         e->update();
@@ -59,6 +67,8 @@ void GameScreen::update()
         entities.push_back(std::move(e));
     }
     queue.clear();
+
+    return nullptr;
 }
 
 void GameScreen::draw(sf::RenderWindow &window)
@@ -68,5 +78,3 @@ void GameScreen::draw(sf::RenderWindow &window)
         e->draw(window);
     }
 }
-
-
