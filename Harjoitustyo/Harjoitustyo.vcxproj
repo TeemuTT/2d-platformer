@@ -150,6 +150,7 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="Enemy.h">
       <SubType>
       </SubType>
