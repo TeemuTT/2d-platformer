@@ -11,7 +11,7 @@ public:
     Player(int x, int y, float sizex, float sizey, GameState* gamestate);
     ~Player();
 
-    virtual void update();
+    virtual void update(float &delta);
     virtual void draw(sf::RenderWindow &window);
 private:
     sf::SoundBuffer shootbuffer;

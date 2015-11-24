@@ -18,7 +18,7 @@ Bullet::~Bullet()
 
 }
 
-void Bullet::update()
+void Bullet::update(float &delta)
 {
     // Destroy bullet after some time.
     time += clock.restart().asSeconds();

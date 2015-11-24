@@ -109,7 +109,7 @@ void Player::handle_vertical()
     y += std::min((int)vy, maxpixels);
 }
 
-void Player::update()
+void Player::update(float &delta)
 {
     handle_vertical();
     handleinput();

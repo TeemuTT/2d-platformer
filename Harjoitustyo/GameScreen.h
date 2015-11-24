@@ -18,6 +18,7 @@ private:
     sf::Music music;
     sf::Clock clock;
     float delta;
+    float fpsclock;
     int fps;
 
     // Ei näin, testausta...

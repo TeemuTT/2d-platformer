@@ -15,12 +15,6 @@ GameScreen::GameScreen(Game* game)
 
     view = sf::View{ sf::Vector2f(320, 240), sf::Vector2f(640, 480) };
 
-    map.load("../Debug/map2.tmx", "../Debug/tileset.png", 40, 20);
-
-    entities.push_back(new Enemy(1156, 352, 64, 64, this));
-    entities.push_back(new Enemy(608, 64, 64, 64, this));
-    entities.push_back(new Enemy(576, 448, 64, 64, this));
-
     goal.left = 416;
     goal.top = 64;
     goal.height = 64;
@@ -49,15 +43,13 @@ GameState* GameScreen::update()
             if (event.key.code == sf::Keyboard::Escape) {
                 return new MainMenu(game);
             }
-            //else if (event.key.code == sf::Keyboard::R) {
-            //    load_level2();
-            //}
         }
     }
 
     if (music.getStatus() == sf::Music::Stopped) music.play();
 
-    delta += clock.restart().asSeconds();
+    delta = clock.restart().asSeconds();
+    fpsclock += delta;
     fps++;
     if (delta >= 1) {
         std::cout << "fps: " << fps << "\n";
@@ -66,7 +58,7 @@ GameState* GameScreen::update()
     }
     
     for (Entity *e : entities) {
-        e->update();
+        e->update(delta);
         if (Player *p = dynamic_cast<Player*>(e)) {
             view.setCenter(p->getOrigin());
             game->set_view(view);
@@ -81,7 +73,6 @@ GameState* GameScreen::update()
         }
     }
 
-    // Karsean näköinen...
     // Erase-remove idiom
     // https://en.wikipedia.org/wiki/Erase%E2%80%93remove_idiom
     entities.erase( std::remove_if(std::begin(entities), std::end(entities),
@@ -127,7 +118,6 @@ void GameScreen::load_level1()
     
     Player *p = nullptr;
     for (Entity *e : entities) {
-        e->update();
         if (p = dynamic_cast<Player*>(e)) {
             p->setPosition(96, 448);
             view.setCenter(p->getOrigin());
@@ -137,9 +127,9 @@ void GameScreen::load_level1()
     }
     entities.clear();
     entities.push_back(p);
-    entities.push_back(new Enemy(1156, 352, 64, 64, this));
-    entities.push_back(new Enemy(608, 64, 64, 64, this));
-    entities.push_back(new Enemy(576, 448, 64, 64, this));
+    entities.push_back(new Enemy(1156, 300, 64, 64, this));
+    entities.push_back(new Enemy(608, 14, 64, 64, this));
+    entities.push_back(new Enemy(576, 390, 64, 64, this));
     loadlevel1 = false;
 }
 
@@ -151,7 +141,6 @@ void GameScreen::load_level2()
 
     Player *p = nullptr;
     for (Entity *e : entities) {
-        e->update();
         if (p = dynamic_cast<Player*>(e)) {
             p->setPosition(960, 128);
             view.setCenter(p->getOrigin());
