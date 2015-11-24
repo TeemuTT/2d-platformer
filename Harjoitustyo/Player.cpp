@@ -10,6 +10,9 @@ Player::Player(int x, int y, float sizex, float sizey, GameState* gamestate) : E
     animation.create_animation("run.png", 10, 38, 38, AnimationHandler::RUN, true);
     animation.create_animation("idle.png", 1, 38, 38, AnimationHandler::IDLE, false);
     animation.create_animation("jump.png", 4, 38, 38, AnimationHandler::JUMP, false);
+
+    shootbuffer.loadFromFile("shoot.wav");
+    shoot.setBuffer(shootbuffer);
 }
 
 Player::~Player()
@@ -62,6 +65,7 @@ void Player::handleinput()
         int by = getOrigin().y;
         gamestate->add_entity(new Bullet(bx, by, sf::Vector2f(heading * BULLET_SPEED, 0), gamestate));
         spacetoggled = false;
+        shoot.play();
     }
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) spacetoggled = true;
 }

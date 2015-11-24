@@ -25,6 +25,10 @@ GameScreen::GameScreen(Game* game)
     goal.top = 64;
     goal.height = 64;
     goal.width = 32;
+
+    music.openFromFile("drwily.wav");
+    music.setVolume(50);
+    music.play();
 }
 
 GameScreen::~GameScreen()
@@ -50,6 +54,8 @@ GameState* GameScreen::update()
             //}
         }
     }
+
+    if (music.getStatus() == sf::Music::Stopped) music.play();
 
     delta += clock.restart().asSeconds();
     fps++;

@@ -22,6 +22,10 @@ MainMenu::MainMenu(Game *game)
     buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 2, 180), sf::Vector2f(120, 30), "Highscores", font);
     buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 2, 220), sf::Vector2f(120, 30), "Quit", font);
     buttons.at(selection).set_focused(true);
+
+    music.openFromFile("menu.wav");
+    music.setVolume(50);
+    music.play();
 }
 
 MainMenu::~MainMenu()

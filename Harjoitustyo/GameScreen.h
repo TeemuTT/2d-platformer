@@ -4,6 +4,8 @@
 #include "GameState.h"
 #include "Entity.h"
 
+#include "SFML/Audio.hpp"
+
 class GameScreen : public GameState
 {
 public:
@@ -13,6 +15,7 @@ public:
     virtual GameState* update();
     virtual void draw(sf::RenderWindow &window);
 private:
+    sf::Music music;
     sf::Clock clock;
     float delta;
     int fps;

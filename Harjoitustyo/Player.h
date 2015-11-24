@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include "Tile.h"
+#include "SFML\Audio.hpp"
 
 class Player : public Entity
 {
@@ -13,6 +14,9 @@ public:
     virtual void update();
     virtual void draw(sf::RenderWindow &window);
 private:
+    sf::SoundBuffer shootbuffer;
+    sf::Sound shoot;
+
     void handleinput();
     void handle_vertical();
 
