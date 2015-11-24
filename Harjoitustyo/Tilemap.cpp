@@ -87,3 +87,8 @@ std::vector<Tile> Tilemap::getTiles()
 {
     return tiles;
 }
+
+sf::FloatRect Tilemap::getBounds()
+{
+    return vertices.getBounds();
+}

@@ -20,10 +20,6 @@ Bullet::~Bullet()
 
 void Bullet::update(float &delta)
 {
-    // Destroy bullet after some time.
-    time += clock.restart().asSeconds();
-    if (time > 1.5F) destroy();
-    
     // Move.
     x += velocity.x;
     y += velocity.y;

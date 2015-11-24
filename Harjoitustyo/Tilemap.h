@@ -19,7 +19,7 @@ public:
     void draw(sf::RenderWindow &window);
     void update();
     std::vector<Tile> getTiles();
-
+    sf::FloatRect getBounds();
 private:
     std::vector<Tile> tiles;
     sf::RenderStates states;

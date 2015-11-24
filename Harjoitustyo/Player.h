@@ -14,6 +14,7 @@ public:
     virtual void update(float &delta);
     virtual void draw(sf::RenderWindow &window);
 private:
+    // Shouldn't create new buffers in every instance.
     sf::SoundBuffer shootbuffer;
     sf::Sound shoot;
 

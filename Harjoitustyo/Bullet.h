@@ -14,10 +14,6 @@ public:
 private:
     sf::Vector2f velocity;
     std::vector<Tile> tiles; // ei näin
-
-    // tmp for testing
-    float time;
-    sf::Clock clock;
 };
 
 #endif

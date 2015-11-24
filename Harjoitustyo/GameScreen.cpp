@@ -5,6 +5,7 @@
 #include "MainMenu.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Constants.h"
 
 GameScreen::GameScreen(Game* game)
 {
@@ -60,7 +61,23 @@ GameState* GameScreen::update()
     for (Entity *e : entities) {
         e->update(delta);
         if (Player *p = dynamic_cast<Player*>(e)) {
+
+            // Update view to players origin. Keep it inside map bounds.
             view.setCenter(p->getOrigin());
+            int max_x = map.getBounds().left + map.getBounds().width;
+            int max_y = map.getBounds().top + map.getBounds().height;
+            if (view.getCenter().x < WINDOW_WIDTH/2) {
+                view.setCenter(sf::Vector2f(WINDOW_WIDTH / 2, view.getCenter().y));
+            }
+            else if (view.getCenter().x > max_x - WINDOW_WIDTH / 2) {
+                view.setCenter(sf::Vector2f(max_x - WINDOW_WIDTH/ 2 , view.getCenter().y));
+            }
+            if (view.getCenter().y < WINDOW_HEIGHT / 2) {
+                view.setCenter(sf::Vector2f(view.getCenter().x, WINDOW_HEIGHT / 2));
+            }
+            else if (view.getCenter().y > max_y - WINDOW_HEIGHT / 2) {
+                view.setCenter(sf::Vector2f(view.getCenter().x, max_y - WINDOW_HEIGHT / 2));
+            }
             game->set_view(view);
 
             // Ei näin, testausta...
@@ -118,10 +135,9 @@ void GameScreen::load_level1()
     
     Player *p = nullptr;
     for (Entity *e : entities) {
+        e->update(delta);
         if (p = dynamic_cast<Player*>(e)) {
             p->setPosition(96, 448);
-            view.setCenter(p->getOrigin());
-            game->set_view(view);
             break;
         }
     }
@@ -141,10 +157,9 @@ void GameScreen::load_level2()
 
     Player *p = nullptr;
     for (Entity *e : entities) {
+        e->update(delta);
         if (p = dynamic_cast<Player*>(e)) {
             p->setPosition(960, 128);
-            view.setCenter(p->getOrigin());
-            game->set_view(view);
             break;
         }
     }
