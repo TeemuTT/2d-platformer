@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "Enemy.h"
+#include "PSNormal.h"
 
 Player::Player(int x, int y, float sizex, float sizey, GameState* gamestate) : Entity(x, y, gamestate)
 {
@@ -21,131 +22,24 @@ Player::Player(int x, int y, float sizex, float sizey, GameState* gamestate) : E
     hitsound.setBuffer(hitbuffer);
 
     hitpoints = 3;
+
+    state = new PSNormal(this);
 }
 
 Player::~Player()
 {
-
+    std::cout << "player destructor\n";
+    delete state;
 }
 
-void Player::handleinput()
-{
-    auto &tiles = gamestate->getTiles(); // ei näin
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-        vx = -SPEED;
-        int maxpixels = INT_MIN;
-        for (Tile t : tiles) {
-            if (t.bottom() <= top()) continue;
-            if (t.top() >= bottom()) continue;
-            if (t.left() >= right()) continue;
-            int distance = t.right() - left();
-            if (distance > maxpixels) maxpixels = distance;
-        }
-        x += std::max((int)vx, maxpixels);
-        heading = -1; // tmp for shooting
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-        vx = SPEED;
-        int maxpixels = INT_MAX;
-        for (Tile t : tiles) {
-            if (t.bottom() <= top()) continue;
-            if (t.top() >= bottom()) continue;
-            if (t.right() <= left()) continue;
-            int distance = t.left() - right();
-            if (distance < maxpixels) maxpixels = distance;
-        }
-        x += std::min((int)vx, maxpixels);
-        heading = 1; // tmp for shooting
-    }
-    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) vx = 0;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) vx = 0;
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W) && grounded && jumptoggled) {
-        grounded = false;
-        vy = JUMP_FORCE;
-        y += vy;
-        jumptoggled = false;
-    }
-    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) jumptoggled = true;
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && spacetoggled) {
-        int bx = getOrigin().x + heading * rect.getSize().x - 4; // magic number: bullet width
-        int by = getOrigin().y;
-        gamestate->add_entity(new Bullet(bx, by, sf::Vector2f(heading * BULLET_SPEED, 0), gamestate));
-        spacetoggled = false;
-        shootsound.play();
-    }
-    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) spacetoggled = true;
-}
-
-void Player::handle_vertical()
-{
-    auto &tiles = gamestate->getTiles(); // ei näin
-    vy += GRAVITY;
-
-    if (vy < 0) {
-        int maxpixels = INT_MIN;
-        for (Tile t : tiles) {
-            if (t.top() >= bottom()) continue;
-            if (t.right() <= left()) continue;
-            if (t.left() >= right()) continue;
-            int distance = t.bottom() - top();
-            if (distance == 0) {
-                vy = 0;
-            }
-            if (distance > maxpixels) maxpixels = distance;
-        }
-        y += std::max((int)vy, maxpixels);
-        return;
-    }
-    
-    int maxpixels = INT_MAX;
-    for (Tile t : tiles) {
-        if (t.bottom() <= top()) continue;
-        if (t.right() <= left()) continue;
-        if (t.left() >= right()) continue;
-        int distance = t.top() - bottom();
-        if (distance < maxpixels) maxpixels = distance;
-    }
-    if (maxpixels == 0) {
-        vy = 0;
-        grounded = true;
-    }
-    else {
-        grounded = false;
-    }
-    y += std::min((int)vy, maxpixels);
-}
 
 void Player::update(float &delta)
 {
-    handle_vertical();
-    handleinput();
-
-    for (Entity *e : gamestate->getEntities()) {
-        if (Enemy *enemy = dynamic_cast<Enemy*>(e)) {
-            if (!recovering && getBounds().intersects(enemy->getBounds())) {
-                std::cout << "hit\n";
-                if (hitsound.getStatus() != sf::Sound::Playing) hitsound.play();
-                hit();
-                if (hitpoints <= 0) destroy();
-                rect.setFillColor(sf::Color(230, 50, 0));
-                recovering = true;
-            }
-        }
+    PlayerState* state_ = state->update(delta);
+    if (state_ != nullptr) {
+        delete state;
+        state = state_;
     }
-
-    if (recovering) {
-        updateflash(delta);
-        recoveryclock += delta;
-        if (recoveryclock >= 1.f) {
-            recovering = false;
-            recoveryclock = 0;
-        }
-    }
-
-    rect.setPosition(x, y);
-    animation.update(*this, vx, vy);
 }
 
 void Player::draw(sf::RenderWindow &window)

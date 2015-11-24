@@ -52,10 +52,10 @@ GameState* GameScreen::update()
     delta = clock.restart().asSeconds();
     fpsclock += delta;
     fps++;
-    if (delta >= 1) {
+    if (fpsclock >= 1) {
         std::cout << "fps: " << fps << "\n";
         fps = 0;
-        delta = 0;
+        fpsclock = 0;
     }
     
     bool isAlive{ false };

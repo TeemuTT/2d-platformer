@@ -1,12 +1,15 @@
 #ifndef __PLAYER__
 #define __PLAYER__
 
+#include "PlayerState.h"
 #include "Entity.h"
 #include "Tile.h"
 #include "SFML\Audio.hpp"
 
 class Player : public Entity
 {
+    friend class PSNormal;
+    friend class PSDead;
 public:
     Player(int x, int y, float sizex, float sizey, GameState* gamestate);
     ~Player();
@@ -14,16 +17,15 @@ public:
     virtual void update(float &delta);
     virtual void draw(sf::RenderWindow &window);
 private:
+
+    PlayerState *state;
+
     // Shouldn't create new buffers in every instance.
     sf::SoundBuffer shootbuffer;
     sf::Sound shootsound;
 
     sf::SoundBuffer hitbuffer;
     sf::Sound hitsound;
-
-
-    void handleinput();
-    void handle_vertical();
 
     const int SPEED = 4;
     const float JUMP_FORCE = -10.F;
