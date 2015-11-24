@@ -16,7 +16,11 @@ public:
 private:
     // Shouldn't create new buffers in every instance.
     sf::SoundBuffer shootbuffer;
-    sf::Sound shoot;
+    sf::Sound shootsound;
+
+    sf::SoundBuffer hitbuffer;
+    sf::Sound hitsound;
+
 
     void handleinput();
     void handle_vertical();
@@ -31,6 +35,9 @@ private:
     // Shoot testing, remove these
     bool spacetoggled;
     int dir = 3;
+
+    bool recovering{ false };
+    float recoveryclock;
 };
 
 #endif

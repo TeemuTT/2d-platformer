@@ -1,6 +1,9 @@
 
+#include <iostream>
+
 #include "Player.h"
 #include "Bullet.h"
+#include "Enemy.h"
 
 Player::Player(int x, int y, float sizex, float sizey, GameState* gamestate) : Entity(x, y, gamestate)
 {
@@ -12,7 +15,12 @@ Player::Player(int x, int y, float sizex, float sizey, GameState* gamestate) : E
     animation.create_animation("jump.png", 4, 38, 38, AnimationHandler::JUMP, false);
 
     shootbuffer.loadFromFile("shoot.wav");
-    shoot.setBuffer(shootbuffer);
+    shootsound.setBuffer(shootbuffer);
+
+    hitbuffer.loadFromFile("playerhit.wav");
+    hitsound.setBuffer(hitbuffer);
+
+    hitpoints = 3;
 }
 
 Player::~Player()
@@ -65,7 +73,7 @@ void Player::handleinput()
         int by = getOrigin().y;
         gamestate->add_entity(new Bullet(bx, by, sf::Vector2f(heading * BULLET_SPEED, 0), gamestate));
         spacetoggled = false;
-        shoot.play();
+        shootsound.play();
     }
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) spacetoggled = true;
 }
@@ -113,6 +121,29 @@ void Player::update(float &delta)
 {
     handle_vertical();
     handleinput();
+
+    for (Entity *e : gamestate->getEntities()) {
+        if (Enemy *enemy = dynamic_cast<Enemy*>(e)) {
+            if (!recovering && getBounds().intersects(enemy->getBounds())) {
+                std::cout << "hit\n";
+                if (hitsound.getStatus() != sf::Sound::Playing) hitsound.play();
+                hit();
+                if (hitpoints <= 0) destroy();
+                rect.setFillColor(sf::Color(230, 50, 0));
+                recovering = true;
+            }
+        }
+    }
+
+    if (recovering) {
+        updateflash(delta);
+        recoveryclock += delta;
+        if (recoveryclock >= 1.f) {
+            recovering = false;
+            recoveryclock = 0;
+        }
+    }
+
     rect.setPosition(x, y);
     animation.update(*this, vx, vy);
 }

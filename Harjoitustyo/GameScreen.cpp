@@ -58,10 +58,11 @@ GameState* GameScreen::update()
         delta = 0;
     }
     
+    bool isAlive{ false };
     for (Entity *e : entities) {
         e->update(delta);
         if (Player *p = dynamic_cast<Player*>(e)) {
-
+            isAlive = true;
             // Update view to players origin. Keep it inside map bounds.
             view.setCenter(p->getOrigin());
             int max_x = map.getBounds().left + map.getBounds().width;
@@ -88,6 +89,10 @@ GameState* GameScreen::update()
                 loadlevel1 = true;
             }
         }
+    }
+    if (!isAlive) {
+        std::cout << "player is dead\n";
+        return new MainMenu(game);
     }
 
     // Erase-remove idiom
