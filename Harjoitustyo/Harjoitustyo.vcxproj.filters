@@ -72,7 +72,7 @@
     <ClCompile Include="PSDead.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PSSlide.cpp">
+    <ClCompile Include="PSSprint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -137,7 +137,7 @@
     <ClInclude Include="PSDead.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PSSlide.h">
+    <ClInclude Include="PSSprint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
