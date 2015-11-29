@@ -16,11 +16,6 @@ GameScreen::GameScreen(Game* game)
 
     view = sf::View{ sf::Vector2f(320, 240), sf::Vector2f(640, 480) };
 
-    goal.left = 416;
-    goal.top = 64;
-    goal.height = 64;
-    goal.width = 32;
-
     music.openFromFile("drwily.wav");
     music.setVolume(50);
     music.play();
@@ -80,13 +75,9 @@ GameState* GameScreen::update()
                 view.setCenter(sf::Vector2f(view.getCenter().x, max_y - WINDOW_HEIGHT / 2));
             }
             game->set_view(view);
-
-            // Ei näin, testausta...
-            if (goal.intersects(p->getBounds()) && goal.left == 416) {
+            
+            if (map.getGoal().intersects(p->getBounds())) {
                 loadlevel2 = true;
-            }
-            else if (goal.intersects(p->getBounds()) && goal.left == 512) {
-                loadlevel1 = true;
             }
         }
     }
@@ -134,37 +125,40 @@ void GameScreen::draw(sf::RenderWindow &window)
 // Ei näin, testausta....
 void GameScreen::load_level1()
 {
-    map.load("../Debug/map2.tmx", "../Debug/tileset.png", 40, 20);
-    goal.left = 416;
-    goal.top = 64;
+    map.load("../Debug/level1_1.tmx", "../Debug/tileset.png", 40, 20);
+
+    int x = map.getStart().left;
+    int y = map.getStart().top;
     
     Player *p = nullptr;
     for (Entity *e : entities) {
-        e->update(delta);
         if (p = dynamic_cast<Player*>(e)) {
-            p->setPosition(96, 448);
+            std::cout << "set player at " << x << ", " << y - 5 << "\n";
+            p->setTiles(map.getTiles());
+            p->setPosition(x, y - 5);
+            p->stop();
             break;
         }
     }
     entities.clear();
     entities.push_back(p);
-    entities.push_back(new Enemy(1156, 300, 64, 64, this));
-    entities.push_back(new Enemy(608, 14, 64, 64, this));
-    entities.push_back(new Enemy(576, 390, 64, 64, this));
     loadlevel1 = false;
 }
 
 void GameScreen::load_level2()
 {
-    map.load("../Debug/level2.tmx", "../Debug/tileset.png", 40, 20);
-    goal.left = 512;
-    goal.top = 128;
+    map.load("../Debug/level1_2.tmx", "../Debug/tileset.png", 40, 20);
+
+    int x = map.getStart().left;
+    int y = map.getStart().top;
 
     Player *p = nullptr;
     for (Entity *e : entities) {
-        e->update(delta);
         if (p = dynamic_cast<Player*>(e)) {
-            p->setPosition(960, 128);
+            std::cout << "set player at " << x << ", " << y - 5 << "\n";
+            p->setTiles(map.getTiles());
+            p->setPosition(x, y - 5);
+            p->stop();
             break;
         }
     }

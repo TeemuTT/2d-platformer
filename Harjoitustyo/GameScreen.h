@@ -26,7 +26,6 @@ private:
     void load_level2();
     bool loadlevel1{ false };
     bool loadlevel2{ false };
-    sf::FloatRect goal;
 };
 
 #endif

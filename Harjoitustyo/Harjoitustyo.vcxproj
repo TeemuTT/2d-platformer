@@ -139,7 +139,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PSDead.cpp" />
     <ClCompile Include="PSNormal.cpp" />
-    <ClCompile Include="PSSlide.cpp" />
+    <ClCompile Include="PSSprint.cpp" />
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Tilemap.cpp" />
@@ -171,7 +171,7 @@
     <ClInclude Include="PlayerState.h" />
     <ClInclude Include="PSDead.h" />
     <ClInclude Include="PSNormal.h" />
-    <ClInclude Include="PSSlide.h" />
+    <ClInclude Include="PSSprint.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Tilemap.h" />

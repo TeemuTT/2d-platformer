@@ -6,7 +6,7 @@
 #include "PSNormal.h"
 #include "Bullet.h"
 #include "PSDead.h"
-#include "PSSlide.h"
+#include "PSSprint.h"
 
 PSNormal::PSNormal(Player *player) : PlayerState(player)
 {
@@ -28,8 +28,8 @@ PlayerState* PSNormal::update(float &delta)
         slide_timer = 0;
         player->vy = 0;
         player->grounded = false;
-        player->slidesound.play();
-        return new PSSlide(player);
+        player->sprintsound.play();
+        return new PSSprint(player);
     }
 
     handle_vertical();
@@ -61,17 +61,18 @@ PlayerState* PSNormal::update(float &delta)
     //player->animation.update(*player);
     player->animation.update(*player, player->vx, player->vy);
 
+    std::cout << "player at " << player->x << ", " << player->y << "\n";
     return nullptr;
 }
 
 void PSNormal::handle_vertical()
 {
-    auto &tiles = player->gamestate->getTiles(); // ei näin
+    //auto &tiles = player->gamestate->getTiles(); // ei näin
     player->vy += player->GRAVITY;
 
     if (player->vy < 0) {
         int maxpixels = INT_MIN;
-        for (Tile t : tiles) {
+        for (Tile t : player->tiles) {
             if (t.top() >= player->bottom()) continue;
             if (t.right() <= player->left()) continue;
             if (t.left() >= player->right()) continue;
@@ -86,7 +87,7 @@ void PSNormal::handle_vertical()
     }
 
     int maxpixels = INT_MAX;
-    for (Tile t : tiles) {
+    for (Tile t : player->tiles) {
         if (t.bottom() <= player->top()) continue;
         if (t.right() <= player->left()) continue;
         if (t.left() >= player->right()) continue;

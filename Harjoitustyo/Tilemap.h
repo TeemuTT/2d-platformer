@@ -20,11 +20,14 @@ public:
     void update();
     std::vector<Tile> getTiles();
     sf::FloatRect getBounds();
+    sf::FloatRect getStart();
+    sf::FloatRect getGoal();
 private:
     std::vector<Tile> tiles;
     sf::RenderStates states;
     sf::Texture tileset;
     sf::VertexArray vertices;
+    sf::FloatRect start, goal;
 };
 
 #endif
