@@ -6,6 +6,7 @@
 #include "PSNormal.h"
 #include "Bullet.h"
 #include "PSDead.h"
+#include "PSSlide.h"
 
 PSNormal::PSNormal(Player *player) : PlayerState(player)
 {
@@ -20,6 +21,17 @@ PSNormal::~PSNormal()
 PlayerState* PSNormal::update(float &delta)
 {
     handle_input();
+
+    // Handle PSSlide here. Could make handle_input() return PlayerState*, but it's not worth it currently.
+    slide_timer += delta;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::K) && slide_timer >= SLIDE_COOLDOWN) {
+        slide_timer = 0;
+        player->vy = 0;
+        player->grounded = false;
+        player->slidesound.play();
+        return new PSSlide(player);
+    }
+
     handle_vertical();
     
     for (Entity *e : player->gamestate->getEntities()) {
@@ -46,6 +58,7 @@ PlayerState* PSNormal::update(float &delta)
     }
 
     player->rect.setPosition(player->x, player->y);
+    //player->animation.update(*player);
     player->animation.update(*player, player->vx, player->vy);
 
     return nullptr;
@@ -138,4 +151,5 @@ void PSNormal::handle_input()
         player->shootsound.play();
     }
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) player->spacetoggled = true;
+
 }

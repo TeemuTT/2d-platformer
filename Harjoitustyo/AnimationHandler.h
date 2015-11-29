@@ -14,13 +14,14 @@ class AnimationHandler
 {
 public:
     enum Direction {
-        RUN, JUMP, IDLE
+        RUN, JUMP, IDLE, SPRINT
     };
 
     AnimationHandler();
     ~AnimationHandler();
 
     void update(Entity &entity, int vx, int vy);
+    void update(Entity &entity, int vx, int vy, Direction dir);
 
     void create_animation(std::string filename, int images, int w, int h, Direction dir, bool looping);
         

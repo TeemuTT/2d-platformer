@@ -10,6 +10,7 @@ class Player : public Entity
 {
     friend class PSNormal;
     friend class PSDead;
+    friend class PSSlide;
 public:
     Player(int x, int y, float sizex, float sizey, GameState* gamestate);
     ~Player();
@@ -26,6 +27,9 @@ private:
 
     sf::SoundBuffer hitbuffer;
     sf::Sound hitsound;
+
+    sf::SoundBuffer slidebuffer;
+    sf::Sound slidesound;
 
     const int SPEED = 4;
     const float JUMP_FORCE = -10.F;
