@@ -34,6 +34,18 @@ bool Tilemap::load(std::string filepath, std::string tilepath, int width, int he
             int tilenumber = atoi(pAttr->value());
             tile = tile->next_sibling();
             if (tilenumber == 0) continue;
+            else if (tilenumber == START_TILE_ID) {
+                start.left = i * TILESIZE;
+                start.top = j * TILESIZE;
+                start.width = 64;
+                start.height = 64;
+            }
+            else if (tilenumber == GOAL_TILE_ID) {
+                goal.left = i * TILESIZE;
+                goal.top = j * TILESIZE;
+                goal.width = 64;
+                goal.height = 64;
+            }
 
             sf::Vertex *quad = &vertices[(j + i * height) * 4];
 
@@ -76,6 +88,7 @@ void Tilemap::draw(sf::RenderWindow &window)
     //for (Tile t : tiles) {
     //    window.draw(t.getShape());
     //}
+
 }
 
 void Tilemap::update()
@@ -91,4 +104,14 @@ std::vector<Tile> Tilemap::getTiles()
 sf::FloatRect Tilemap::getBounds()
 {
     return vertices.getBounds();
+}
+
+sf::FloatRect Tilemap::getStart()
+{
+    return start;
+}
+
+sf::FloatRect Tilemap::getGoal()
+{
+    return goal;
 }

@@ -22,8 +22,8 @@ Player::Player(int x, int y, float sizex, float sizey, GameState* gamestate) : E
     hitbuffer.loadFromFile("playerhit.wav");
     hitsound.setBuffer(hitbuffer);
 
-    slidebuffer.loadFromFile("slide.wav");
-    slidesound.setBuffer(slidebuffer);
+    sprintbuffer.loadFromFile("slide.wav");
+    sprintsound.setBuffer(sprintbuffer);
     
     hitpoints = 3;
 
@@ -49,4 +49,18 @@ void Player::update(float &delta)
 void Player::draw(sf::RenderWindow &window)
 {   
     window.draw(rect);
+}
+
+void Player::setTiles(std::vector<Tile> tiles)
+{
+    this->tiles = tiles;
+}
+
+void Player::stop()
+{
+    vx = 0;
+    vy = 0;
+    grounded = false;
+    delete state;
+    state = new PSNormal(this);
 }

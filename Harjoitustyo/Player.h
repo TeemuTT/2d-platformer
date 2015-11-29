@@ -10,15 +10,18 @@ class Player : public Entity
 {
     friend class PSNormal;
     friend class PSDead;
-    friend class PSSlide;
+    friend class PSSprint;
 public:
     Player(int x, int y, float sizex, float sizey, GameState* gamestate);
     ~Player();
 
     virtual void update(float &delta);
     virtual void draw(sf::RenderWindow &window);
-private:
 
+    void stop();
+    void setTiles(std::vector<Tile> tiles);
+private:
+    std::vector<Tile> tiles; // ei näin
     PlayerState *state;
 
     // Shouldn't create new buffers in every instance.
@@ -28,8 +31,8 @@ private:
     sf::SoundBuffer hitbuffer;
     sf::Sound hitsound;
 
-    sf::SoundBuffer slidebuffer;
-    sf::Sound slidesound;
+    sf::SoundBuffer sprintbuffer;
+    sf::Sound sprintsound;
 
     const int SPEED = 4;
     const float JUMP_FORCE = -10.F;

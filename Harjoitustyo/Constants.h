@@ -11,6 +11,7 @@ const std::string TITLE = "TITLE";
 
 // Map
 const int TILESIZE = 32;
-
+const int START_TILE_ID = 125;
+const int GOAL_TILE_ID = 141;
 
 #endif
