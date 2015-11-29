@@ -1,20 +1,23 @@
 
-#include "Tilemap.h"
 #include <iostream>
+
+#include "Tilemap.h"
+#include "Constants.h"
 
 Tilemap::Tilemap()
 {
     states.texture = &tileset;
 }
 
-bool Tilemap::load(sf::Vector2u tileSize, int width, int height)
+bool Tilemap::load(std::string filepath, std::string tilepath, int width, int height)
 {
-    if (!tileset.loadFromFile("../Debug/tileset.png")) return false;
+    if (!tileset.loadFromFile(tilepath)) return false;
+    tiles.clear();
 
     using namespace rapidxml;
 
     xml_document<> doc;
-    file<> xmlFile("../Debug/map2.tmx");
+    file<> xmlFile(filepath.c_str());
     doc.parse<0>(xmlFile.data());
     xml_node<> *root = doc.first_node("map");
     xml_node<> *tile = root->first_node("layer");
@@ -34,18 +37,18 @@ bool Tilemap::load(sf::Vector2u tileSize, int width, int height)
 
             sf::Vertex *quad = &vertices[(j + i * height) * 4];
 
-            quad[0].position = sf::Vector2f(i * tileSize.x, j * tileSize.y);
-            quad[1].position = sf::Vector2f((i + 1) * tileSize.x, j * tileSize.y);
-            quad[2].position = sf::Vector2f((i + 1) * tileSize.x, (j + 1) * tileSize.y);
-            quad[3].position = sf::Vector2f(i * tileSize.x, (j + 1) * tileSize.y);
+            quad[0].position = sf::Vector2f(i * TILESIZE, j * TILESIZE);
+            quad[1].position = sf::Vector2f((i + 1) * TILESIZE, j * TILESIZE);
+            quad[2].position = sf::Vector2f((i + 1) * TILESIZE, (j + 1) * TILESIZE);
+            quad[3].position = sf::Vector2f(i * TILESIZE, (j + 1) * TILESIZE);
 
             tilenumber--;
-            int tu = tilenumber % (tileset.getSize().x / tileSize.x);
-            int tv = tilenumber / (tileset.getSize().x / tileSize.x);
-            quad[0].texCoords = sf::Vector2f(tu * tileSize.x, tv * tileSize.y);
-            quad[1].texCoords = sf::Vector2f((tu + 1) * tileSize.x, tv * tileSize.y);
-            quad[2].texCoords = sf::Vector2f((tu + 1) * tileSize.x, (tv + 1) * tileSize.y);
-            quad[3].texCoords = sf::Vector2f(tu * tileSize.x, (tv + 1) * tileSize.y);
+            int tu = tilenumber % (tileset.getSize().x / TILESIZE);
+            int tv = tilenumber / (tileset.getSize().x / TILESIZE);
+            quad[0].texCoords = sf::Vector2f(tu * TILESIZE, tv * TILESIZE);
+            quad[1].texCoords = sf::Vector2f((tu + 1) * TILESIZE, tv * TILESIZE);
+            quad[2].texCoords = sf::Vector2f((tu + 1) * TILESIZE, (tv + 1) * TILESIZE);
+            quad[3].texCoords = sf::Vector2f(tu * TILESIZE, (tv + 1) * TILESIZE);
         }
     }
 
@@ -59,8 +62,8 @@ bool Tilemap::load(sf::Vector2u tileSize, int width, int height)
             tile = tile->next_sibling();
             if (tilenumber == 0) continue;
             tilenumber--;
-            int x = i * tileSize.x;
-            int y = j * tileSize.y;
+            int x = i * TILESIZE;
+            int y = j * TILESIZE;
             tiles.emplace_back(x, y);
         }
     }
@@ -83,4 +86,9 @@ void Tilemap::update()
 std::vector<Tile> Tilemap::getTiles()
 {
     return tiles;
+}
+
+sf::FloatRect Tilemap::getBounds()
+{
+    return vertices.getBounds();
 }

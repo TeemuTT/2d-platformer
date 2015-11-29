@@ -45,6 +45,21 @@ void AnimationHandler::update(Entity &entity, int vx, int vy)
     entity.setTextureRect(animations.at(dir).getTextureRect(delta, left));
 }
 
+void AnimationHandler::update(Entity &entity, int vx, int vy, Direction dir)
+{
+    float delta = clock.restart().asSeconds() * 10;
+
+    if (vx > 0) {
+        left = false;
+    }
+    else if (vx < 0) {
+        left = true;
+    }
+
+    entity.setTexture(animations.at(dir).getTexture());
+    entity.setTextureRect(animations.at(dir).getTextureRect(delta, left));
+}
+
 void AnimationHandler::create_animation(std::string filename, int images, int w, int h, Direction dir, bool looping)
 {
     Animation animation{ filename, images, w, h, looping };

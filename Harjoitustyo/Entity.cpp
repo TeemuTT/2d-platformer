@@ -83,3 +83,25 @@ void Entity::setTextureRect(sf::IntRect intrect)
 {
     rect.setTextureRect(intrect);
 }
+
+void Entity::setPosition(int x, int y)
+{
+    this->x = x;
+    this->y = y;
+}
+
+void Entity::hit()
+{
+    --hitpoints;
+}
+
+void Entity::updateflash(float &delta)
+{
+    if (rect.getFillColor() == sf::Color(230, 50, 0)) {
+        flashclock += delta;
+        if (flashclock >= 0.15f) {
+            rect.setFillColor(sf::Color(255, 255, 255));
+            flashclock = 0;
+        }
+    }
+}

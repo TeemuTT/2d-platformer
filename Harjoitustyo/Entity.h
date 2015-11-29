@@ -11,7 +11,7 @@ public:
     Entity(int x, int y, GameState* gamestate);
     virtual ~Entity();
 
-    virtual void update() = 0;
+    virtual void update(float &delta) = 0;
     virtual void draw(sf::RenderWindow &window) = 0;
     
     sf::Vector2f getPosition();
@@ -19,14 +19,16 @@ public:
 
     bool isDestroyed();
     bool isGrounded();
+    void setPosition(int x, int y);
     void setTexture(sf::Texture* texture);
     void setTextureRect(sf::IntRect intrect);
     bool collision(Entity *entity);
     void destroy();
+    void hit();
+    void updateflash(float &delta);
     sf::FloatRect getBounds();
 
 protected:
-    bool destroyed{ false };
     sf::Texture texture;
     sf::RectangleShape rect;
 
@@ -35,15 +37,17 @@ protected:
 
     int x, y;
     float vx, vy;
-    bool grounded{ true };
+    float flashclock;
     int heading{ 1 };
+    int hitpoints{ 0 };
+    bool grounded{ true };
+    bool destroyed{ false };
 
-    int left();
     int top();
+    int left();
     int right();
     int bottom();
 
-    
 };
 
 #endif

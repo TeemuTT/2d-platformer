@@ -9,4 +9,8 @@ const int WINDOW_HEIGHT = 480;
 const int FPSLIMIT = 60;
 const std::string TITLE = "TITLE";
 
+// Map
+const int TILESIZE = 32;
+
+
 #endif

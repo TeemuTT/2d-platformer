@@ -9,7 +9,7 @@ Game::Game()
 {
     window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), TITLE);
     window.setFramerateLimit(FPSLIMIT);
-
+    window.setKeyRepeatEnabled(false);
     //std::cout << "view: " << window.getView().getViewport().left << ", " << window.getView().getViewport().left << std::endl;
 }
 
@@ -43,12 +43,13 @@ GameState* Game::peek()
 void Game::run()
 {
     while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
-        }
+        //sf::Event event;
+        //while (window.pollEvent(event)) {
+        //    //std::cout << "event: " << event.type << std::endl;
+        //    if (event.type == sf::Event::Closed) {
+        //        window.close();
+        //    }
+        //}
 
         GameState* state = peek();
         if (state == nullptr) {
