@@ -9,6 +9,7 @@ Game::Game()
 {
     window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), TITLE);
     window.setFramerateLimit(FPSLIMIT);
+    window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
     //std::cout << "view: " << window.getView().getViewport().left << ", " << window.getView().getViewport().left << std::endl;
 }

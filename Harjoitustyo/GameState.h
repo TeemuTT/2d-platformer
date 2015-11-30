@@ -5,6 +5,7 @@
 
 #include "Game.h"
 #include "Tilemap.h"
+#include "Level.h"
 
 class Entity;
 
@@ -27,7 +28,7 @@ protected:
     Game* game;
     std::vector<Entity*> entities;
     std::vector<Entity*> queue;
-    Tilemap map;
+    Level level;
     sf::View view;
 };
 

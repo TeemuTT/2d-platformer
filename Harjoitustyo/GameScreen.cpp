@@ -11,9 +11,14 @@ GameScreen::GameScreen(Game* game)
 {
     destroyed = false;
     this->game = game;
-    entities.push_back(new Player(96, 448, 50, 64, this));
-    load_level1();
 
+    level = Level("level_1.txt");
+    level.load();
+    
+    entities.push_back(new Player(0, 0, 50, 64, this));
+    dynamic_cast<Player*>(entities.at(0))->setPosition(level.getStart());
+    dynamic_cast<Player*>(entities.at(0))->setTiles(level.getTiles());
+    
     view = sf::View{ sf::Vector2f(320, 240), sf::Vector2f(640, 480) };
 
     music.openFromFile("drwily.wav");
@@ -60,8 +65,8 @@ GameState* GameScreen::update()
             isAlive = true;
             // Update view to players origin. Keep it inside map bounds.
             view.setCenter(p->getOrigin());
-            int max_x = map.getBounds().left + map.getBounds().width;
-            int max_y = map.getBounds().top + map.getBounds().height;
+            int max_x = level.getBounds().left + level.getBounds().width;
+            int max_y = level.getBounds().top + level.getBounds().height;
             if (view.getCenter().x < WINDOW_WIDTH/2) {
                 view.setCenter(sf::Vector2f(WINDOW_WIDTH / 2, view.getCenter().y));
             }
@@ -76,8 +81,15 @@ GameState* GameScreen::update()
             }
             game->set_view(view);
             
-            if (map.getGoal().intersects(p->getBounds())) {
-                loadlevel2 = true;
+            // Are we at the end of the current tilemap? Load next one if there is. Else quit.
+            if (level.getGoal().intersects(p->getBounds())) {
+                if (level.transition()) {
+                    p->setPosition(level.getStart());
+                    p->setTiles(level.getTiles());
+                }
+                else {
+                    // Then end
+                }
             }
         }
     }
@@ -103,66 +115,13 @@ GameState* GameScreen::update()
     }
     queue.clear();
 
-    if (loadlevel2) {
-        load_level2();
-    }
-    else if (loadlevel1) {
-        load_level1();
-    }
-
     return nullptr;
 }
 
 void GameScreen::draw(sf::RenderWindow &window)
-{    
-    map.draw(window);
+{
+    level.getMap()->draw(window);
     for (Entity *e : entities) {
         e->draw(window);
     }
-}
-
-
-// Ei näin, testausta....
-void GameScreen::load_level1()
-{
-    map.load("../Debug/level1_1.tmx", "../Debug/tileset.png", 40, 20);
-
-    int x = map.getStart().left;
-    int y = map.getStart().top;
-    
-    Player *p = nullptr;
-    for (Entity *e : entities) {
-        if (p = dynamic_cast<Player*>(e)) {
-            std::cout << "set player at " << x << ", " << y - 5 << "\n";
-            p->setTiles(map.getTiles());
-            p->setPosition(x, y - 5);
-            p->stop();
-            break;
-        }
-    }
-    entities.clear();
-    entities.push_back(p);
-    loadlevel1 = false;
-}
-
-void GameScreen::load_level2()
-{
-    map.load("../Debug/level1_2.tmx", "../Debug/tileset.png", 40, 20);
-
-    int x = map.getStart().left;
-    int y = map.getStart().top;
-
-    Player *p = nullptr;
-    for (Entity *e : entities) {
-        if (p = dynamic_cast<Player*>(e)) {
-            std::cout << "set player at " << x << ", " << y - 5 << "\n";
-            p->setTiles(map.getTiles());
-            p->setPosition(x, y - 5);
-            p->stop();
-            break;
-        }
-    }
-    entities.clear();
-    entities.push_back(p);
-    loadlevel2 = false;
 }

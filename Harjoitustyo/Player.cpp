@@ -5,6 +5,7 @@
 #include "Bullet.h"
 #include "Enemy.h"
 #include "PSNormal.h"
+#include "PSTransition.h"
 
 Player::Player(int x, int y, float sizex, float sizey, GameState* gamestate) : Entity(x, y, gamestate)
 {
@@ -60,7 +61,7 @@ void Player::stop()
 {
     vx = 0;
     vy = 0;
-    grounded = false;
+    y -= 5;
     delete state;
-    state = new PSNormal(this);
+    state = new PSTransition(this);
 }

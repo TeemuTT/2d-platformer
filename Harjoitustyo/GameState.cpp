@@ -23,7 +23,7 @@ std::vector<Entity*> GameState::getEntities()
 
 std::vector<Tile> GameState::getTiles()
 {
-    return map.getTiles();
+    return level.getTiles();
 }
 
 sf::View GameState::getView()

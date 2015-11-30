@@ -16,6 +16,7 @@ class Tilemap
 public:
     Tilemap();
     bool load(std::string filename, std::string tileset, int width, int height);
+    bool load(std::string filename);
     void draw(sf::RenderWindow &window);
     void update();
     std::vector<Tile> getTiles();

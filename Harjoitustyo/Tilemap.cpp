@@ -6,12 +6,35 @@
 
 Tilemap::Tilemap()
 {
-    states.texture = &tileset;
+    
+}
+
+bool Tilemap::load(std::string filename)
+{
+    std::string tilepath = "../Debug/";
+    int width, height;
+
+    using namespace rapidxml;
+    xml_document<> doc;
+    file<> xmlFile(filename.c_str());
+    doc.parse<0>(xmlFile.data());
+    xml_node<> *root = doc.first_node("map");
+    xml_attribute<> *pAttr = root->first_attribute("width");
+    width = atoi(pAttr->value());
+    pAttr = root->first_attribute("height");
+    height = atoi(pAttr->value());
+
+    xml_node<> *source = root->first_node()->first_node();
+    pAttr = source->first_attribute("source");
+    tilepath.append(pAttr->value());
+
+    return load(filename, tilepath, width, height);
 }
 
 bool Tilemap::load(std::string filepath, std::string tilepath, int width, int height)
 {
     if (!tileset.loadFromFile(tilepath)) return false;
+    states.texture = &tileset;
     tiles.clear();
 
     using namespace rapidxml;
@@ -85,9 +108,9 @@ bool Tilemap::load(std::string filepath, std::string tilepath, int width, int he
 void Tilemap::draw(sf::RenderWindow &window)
 {
     window.draw(vertices, states);
-    //for (Tile t : tiles) {
-    //    window.draw(t.getShape());
-    //}
+    for (Tile t : tiles) {
+        window.draw(t.getShape());
+    }
 
 }
 

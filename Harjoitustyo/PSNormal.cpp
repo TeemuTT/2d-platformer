@@ -61,7 +61,7 @@ PlayerState* PSNormal::update(float &delta)
     //player->animation.update(*player);
     player->animation.update(*player, player->vx, player->vy);
 
-    std::cout << "player at " << player->x << ", " << player->y << "\n";
+    //std::cout << "player at " << player->x << ", " << player->y << "\n";
     return nullptr;
 }
 

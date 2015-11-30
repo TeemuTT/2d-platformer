@@ -88,6 +88,14 @@ void Entity::setPosition(int x, int y)
 {
     this->x = x;
     this->y = y;
+    rect.setPosition(sf::Vector2f(x, y));
+}
+
+void Entity::setPosition(sf::FloatRect pos)
+{
+    this->x = pos.left;
+    this->y = pos.top;
+    rect.setPosition(sf::Vector2f(x, y));
 }
 
 void Entity::hit()

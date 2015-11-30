@@ -3,6 +3,7 @@
 
 #include "GameState.h"
 #include "Entity.h"
+#include "Level.h"
 
 #include "SFML/Audio.hpp"
 
@@ -20,12 +21,6 @@ private:
     float delta;
     float fpsclock;
     int fps;
-
-    // Ei näin, testausta...
-    void load_level1();
-    void load_level2();
-    bool loadlevel1{ false };
-    bool loadlevel2{ false };
 };
 
 #endif

@@ -11,6 +11,7 @@ class Player : public Entity
     friend class PSNormal;
     friend class PSDead;
     friend class PSSprint;
+    friend class PSTransition;
 public:
     Player(int x, int y, float sizex, float sizey, GameState* gamestate);
     ~Player();
