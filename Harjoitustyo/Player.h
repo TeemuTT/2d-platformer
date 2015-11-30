@@ -19,7 +19,7 @@ public:
     virtual void update(float &delta);
     virtual void draw(sf::RenderWindow &window);
 
-    void stop();
+    void transition();
     void setTiles(std::vector<Tile> tiles);
 private:
     std::vector<Tile> tiles; // ei näin

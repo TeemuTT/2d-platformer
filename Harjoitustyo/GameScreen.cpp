@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "GameScreen.h"
+#include "TransitionState.h"
 #include "MainMenu.h"
 #include "Player.h"
 #include "Enemy.h"
@@ -81,14 +82,14 @@ GameState* GameScreen::update()
             }
             game->set_view(view);
             
-            // Are we at the end of the current tilemap? Load next one if there is. Else quit.
+            // Are we at the end of the current tilemap? Load next one if it exists. Else quit.
             if (level.getGoal().intersects(p->getBounds())) {
-                if (level.transition()) {
-                    p->setPosition(level.getStart());
-                    p->setTiles(level.getTiles());
+                if (level.hasNext()) {
+                    p->transition();
+                    game->push_state(new TransitionState(game, this));
                 }
                 else {
-                    // Then end
+                    // The end
                 }
             }
         }
@@ -123,5 +124,37 @@ void GameScreen::draw(sf::RenderWindow &window)
     level.getMap()->draw(window);
     for (Entity *e : entities) {
         e->draw(window);
+    }
+}
+
+void GameScreen::transition()
+{
+    level.transition();
+
+    for (Entity *e : entities) {
+        if (Player *p = dynamic_cast<Player*>(e)) {
+            p->setPosition(level.getStart());
+            p->setTiles(level.getTiles());
+
+            // Update view to players origin. Keep it inside map bounds.
+            view.setCenter(p->getOrigin());
+            int max_x = level.getBounds().left + level.getBounds().width;
+            int max_y = level.getBounds().top + level.getBounds().height;
+            if (view.getCenter().x < WINDOW_WIDTH / 2) {
+                view.setCenter(sf::Vector2f(WINDOW_WIDTH / 2, view.getCenter().y));
+            }
+            else if (view.getCenter().x > max_x - WINDOW_WIDTH / 2) {
+                view.setCenter(sf::Vector2f(max_x - WINDOW_WIDTH / 2, view.getCenter().y));
+            }
+            if (view.getCenter().y < WINDOW_HEIGHT / 2) {
+                view.setCenter(sf::Vector2f(view.getCenter().x, WINDOW_HEIGHT / 2));
+            }
+            else if (view.getCenter().y > max_y - WINDOW_HEIGHT / 2) {
+                view.setCenter(sf::Vector2f(view.getCenter().x, max_y - WINDOW_HEIGHT / 2));
+            }
+            game->set_view(view);
+
+            break;
+        }
     }
 }

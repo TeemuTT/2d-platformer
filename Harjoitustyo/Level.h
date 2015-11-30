@@ -21,6 +21,7 @@ public:
     Tilemap* getMap();
 
     bool transition();
+    bool hasNext();
 
 private:
     std::string filename;

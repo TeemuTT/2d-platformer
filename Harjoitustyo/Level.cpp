@@ -67,3 +67,9 @@ bool Level::transition()
     }
     return map.load(tilemaps.at(current));
 }
+
+bool Level::hasNext()
+{
+    if (current + 1 >= tilemaps.size()) return false;
+    else return true;
+}

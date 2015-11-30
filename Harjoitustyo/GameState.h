@@ -17,6 +17,8 @@ public:
     virtual GameState* update() = 0;
     virtual void draw(sf::RenderWindow &window) = 0;
 
+    virtual void transition();
+
     bool isDestroyed();
     void add_entity(Entity* entity);
     

@@ -57,11 +57,8 @@ void Player::setTiles(std::vector<Tile> tiles)
     this->tiles = tiles;
 }
 
-void Player::stop()
+void Player::transition()
 {
-    vx = 0;
-    vy = 0;
-    y -= 5;
     delete state;
     state = new PSTransition(this);
 }

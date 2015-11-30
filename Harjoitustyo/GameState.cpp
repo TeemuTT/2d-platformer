@@ -30,3 +30,8 @@ sf::View GameState::getView()
 {
     return view;
 }
+
+void GameState::transition()
+{
+
+}
