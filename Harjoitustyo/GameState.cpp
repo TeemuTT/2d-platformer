@@ -35,3 +35,8 @@ void GameState::transition()
 {
 
 }
+
+sf::FloatRect GameState::getBounds()
+{
+    return level.getBounds();
+}

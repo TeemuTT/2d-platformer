@@ -9,19 +9,22 @@
 #include "Enemy.h"
 #include "Constants.h"
 
-GameScreen::GameScreen(Game* game)
+GameScreen::GameScreen(Game* game, std::string filename)
 {
     destroyed = false;
     this->game = game;
 
-    level = Level("level_1.txt");
+    level = Level(filename);
     level.load();
-    
-    entities.push_back(new Player(0, 0, 50, 64, this));
-    dynamic_cast<Player*>(entities.at(0))->setPosition(level.getStart());
-    dynamic_cast<Player*>(entities.at(0))->setTiles(level.getTiles());
-    
-    view = sf::View{ sf::Vector2f(320, 240), sf::Vector2f(640, 480) };
+
+    Player *player = new Player(0, 0, 50, 64, this);
+    player->setPosition(level.getStart());
+    player->setTiles(level.getTiles());
+    entities.push_back(player);
+
+    view.setSize(640, 480);
+    center_view(player);
+    game->set_view(view);
 
     music.openFromFile("drwily.wav");
     music.setVolume(50);
@@ -30,6 +33,26 @@ GameScreen::GameScreen(Game* game)
     fillRect.setPosition(sf::Vector2f(0, 0));
     fillRect.setSize(sf::Vector2f(1500, 1500));
     fillRect.setFillColor(sf::Color(0, 0, 0, alpha));
+}
+
+void GameScreen::center_view(Player *p)
+{
+    view.setCenter(p->getOrigin());
+    int max_x = level.getBounds().left + level.getBounds().width;
+    int max_y = level.getBounds().top + level.getBounds().height;
+    if (view.getCenter().x < WINDOW_WIDTH / 2) {
+        view.setCenter(sf::Vector2f(WINDOW_WIDTH / 2, view.getCenter().y));
+    }
+    else if (view.getCenter().x > max_x - WINDOW_WIDTH / 2) {
+        view.setCenter(sf::Vector2f(max_x - WINDOW_WIDTH / 2, view.getCenter().y));
+    }
+    if (view.getCenter().y < WINDOW_HEIGHT / 2) {
+        view.setCenter(sf::Vector2f(view.getCenter().x, WINDOW_HEIGHT / 2));
+    }
+    else if (view.getCenter().y > max_y - WINDOW_HEIGHT / 2) {
+        view.setCenter(sf::Vector2f(view.getCenter().x, max_y - WINDOW_HEIGHT / 2));
+    }
+    game->set_view(view);
 }
 
 GameScreen::~GameScreen()
@@ -50,8 +73,22 @@ bool GameScreen::fadeout()
     return false;
 }
 
+bool GameScreen::fadein()
+{
+    alpha -= 3;
+    fillRect.setFillColor(sf::Color(0, 0, 0, alpha));
+    if (alpha <= 0) return true;
+    return false;
+}
+
 GameState* GameScreen::update()
 {
+    if (starting) {
+        if (fadein()) {
+            starting = false;
+        }
+        return nullptr;
+    }
     if (cleared) {
         if (fadeout()) return new WinState(game);
         return nullptr;
@@ -80,25 +117,8 @@ GameState* GameScreen::update()
     for (Entity *e : entities) {
         e->update(delta);
         if (Player *p = dynamic_cast<Player*>(e)) {
-            isAlive = true;
-            // Update view to players origin. Keep it inside map bounds.
-            view.setCenter(p->getOrigin());
-            int max_x = level.getBounds().left + level.getBounds().width;
-            int max_y = level.getBounds().top + level.getBounds().height;
-            if (view.getCenter().x < WINDOW_WIDTH/2) {
-                view.setCenter(sf::Vector2f(WINDOW_WIDTH / 2, view.getCenter().y));
-            }
-            else if (view.getCenter().x > max_x - WINDOW_WIDTH / 2) {
-                view.setCenter(sf::Vector2f(max_x - WINDOW_WIDTH/ 2 , view.getCenter().y));
-            }
-            if (view.getCenter().y < WINDOW_HEIGHT / 2) {
-                view.setCenter(sf::Vector2f(view.getCenter().x, WINDOW_HEIGHT / 2));
-            }
-            else if (view.getCenter().y > max_y - WINDOW_HEIGHT / 2) {
-                view.setCenter(sf::Vector2f(view.getCenter().x, max_y - WINDOW_HEIGHT / 2));
-            }
-            game->set_view(view);
-            
+            isAlive = true;            
+            center_view(p);            
             // Are we at the end of the current tilemap? Load next one if it exists. Else quit.
             if (level.getGoal().intersects(p->getBounds())) {
                 if (level.hasNext()) {
@@ -143,7 +163,7 @@ void GameScreen::draw(sf::RenderWindow &window)
     for (Entity *e : entities) {
         e->draw(window);
     }
-    if (cleared) {
+    if (cleared || starting) {
         window.draw(fillRect);
     }
 }
@@ -156,25 +176,7 @@ void GameScreen::transition()
         if (Player *p = dynamic_cast<Player*>(e)) {
             p->setPosition(level.getStart());
             p->setTiles(level.getTiles());
-
-            // Update view to players origin. Keep it inside map bounds.
-            view.setCenter(p->getOrigin());
-            int max_x = level.getBounds().left + level.getBounds().width;
-            int max_y = level.getBounds().top + level.getBounds().height;
-            if (view.getCenter().x < WINDOW_WIDTH / 2) {
-                view.setCenter(sf::Vector2f(WINDOW_WIDTH / 2, view.getCenter().y));
-            }
-            else if (view.getCenter().x > max_x - WINDOW_WIDTH / 2) {
-                view.setCenter(sf::Vector2f(max_x - WINDOW_WIDTH / 2, view.getCenter().y));
-            }
-            if (view.getCenter().y < WINDOW_HEIGHT / 2) {
-                view.setCenter(sf::Vector2f(view.getCenter().x, WINDOW_HEIGHT / 2));
-            }
-            else if (view.getCenter().y > max_y - WINDOW_HEIGHT / 2) {
-                view.setCenter(sf::Vector2f(view.getCenter().x, max_y - WINDOW_HEIGHT / 2));
-            }
-            game->set_view(view);
-
+            center_view(p);
             break;
         }
     }

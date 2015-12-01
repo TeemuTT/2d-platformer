@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "MainMenu.h"
-#include "GameScreen.h"
+#include "LevelSelect.h"
 #include "OptionsScreen.h"
 #include "HighscoresScreen.h"
 #include "Constants.h"
@@ -10,6 +10,7 @@
 MainMenu::MainMenu(Game *game)
 {
     this->game = game;
+    game->reset_view();
     font.loadFromFile("HATTEN.ttf");
 
     title.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - 60, 40));
@@ -57,7 +58,7 @@ GameState* MainMenu::update()
                 switch (selection)
                 {
                 case 0:
-                    return new GameScreen(game);
+                    return new LevelSelect(game);
                     break;
                 case 1:
                     game->push_state(new OptionsScreen(game));

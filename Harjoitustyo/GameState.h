@@ -25,6 +25,7 @@ public:
     std::vector<Entity*> getEntities();
     std::vector<Tile> getTiles();
     sf::View getView();
+    sf::FloatRect getBounds();
 protected:
     bool destroyed;
     Game* game;

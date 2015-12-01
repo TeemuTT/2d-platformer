@@ -16,6 +16,7 @@ Player::Player(int x, int y, float sizex, float sizey, GameState* gamestate) : E
     animation.create_animation("idle.png", 1, 38, 38, AnimationHandler::IDLE, false);
     animation.create_animation("jump.png", 4, 38, 38, AnimationHandler::JUMP, false);
     animation.create_animation("slide.png", 2, 48, 38, AnimationHandler::SPRINT, false);
+    animation.update(*this, 0, 0, AnimationHandler::IDLE);
 
     shootbuffer.loadFromFile("shoot.wav");
     shootsound.setBuffer(shootbuffer);

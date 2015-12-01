@@ -134,6 +134,7 @@
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="HighscoresScreen.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="LevelSelect.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="OptionsScreen.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="HighscoresScreen.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="LevelSelect.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="OptionsScreen.h" />
     <ClInclude Include="Player.h" />

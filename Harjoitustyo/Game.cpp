@@ -31,8 +31,6 @@ void Game::pop_state()
 {
     delete states.top();
     states.pop();
-    window.setView(window.getDefaultView());
-    std::cout << "view: " << window.getView().getViewport().left << ", " << window.getView().getViewport().left << std::endl;
 }
 
 GameState* Game::peek()
@@ -44,13 +42,6 @@ GameState* Game::peek()
 void Game::run()
 {
     while (window.isOpen()) {
-        //sf::Event event;
-        //while (window.pollEvent(event)) {
-        //    //std::cout << "event: " << event.type << std::endl;
-        //    if (event.type == sf::Event::Closed) {
-        //        window.close();
-        //    }
-        //}
 
         GameState* state = peek();
         if (state == nullptr) {

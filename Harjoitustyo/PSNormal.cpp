@@ -33,6 +33,9 @@ PlayerState* PSNormal::update(float &delta)
     }
 
     handle_vertical();
+    if (!player->gamestate->getBounds().intersects(player->getBounds())) {
+        return new PSDead(player);
+    }
     
     for (Entity *e : player->gamestate->getEntities()) {
         if (Enemy *enemy = dynamic_cast<Enemy*>(e)) {
@@ -58,10 +61,8 @@ PlayerState* PSNormal::update(float &delta)
     }
 
     player->rect.setPosition(player->x, player->y);
-    //player->animation.update(*player);
     player->animation.update(*player, player->vx, player->vy);
 
-    //std::cout << "player at " << player->x << ", " << player->y << "\n";
     return nullptr;
 }
 
