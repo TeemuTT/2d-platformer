@@ -19,6 +19,7 @@ public:
     bool load(std::string filename);
     void draw(sf::RenderWindow &window);
     void update();
+    void clear();
     std::vector<Tile> getTiles();
     sf::FloatRect getBounds();
     sf::FloatRect getStart();

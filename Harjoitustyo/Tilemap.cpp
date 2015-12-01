@@ -108,15 +108,21 @@ bool Tilemap::load(std::string filepath, std::string tilepath, int width, int he
 void Tilemap::draw(sf::RenderWindow &window)
 {
     window.draw(vertices, states);
-    for (Tile t : tiles) {
-        window.draw(t.getShape());
-    }
+    //for (Tile t : tiles) {
+    //    window.draw(t.getShape());
+    //}
 
 }
 
 void Tilemap::update()
 {
     return;
+}
+
+void Tilemap::clear()
+{
+    tiles.clear();
+    vertices.clear();
 }
 
 std::vector<Tile> Tilemap::getTiles()

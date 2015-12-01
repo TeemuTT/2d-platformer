@@ -14,6 +14,7 @@ public:
 
     void draw(sf::RenderWindow &window);
     void load();
+    void clear();
     std::vector<Tile> getTiles();
     sf::FloatRect getBounds();
     sf::FloatRect getStart();

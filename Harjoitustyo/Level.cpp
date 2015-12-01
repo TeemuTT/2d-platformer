@@ -30,6 +30,11 @@ void Level::load()
     map.load(tilemaps.at(current));
 }
 
+void Level::clear()
+{
+
+}
+
 std::vector<Tile> Level::getTiles()
 {
     return map.getTiles();

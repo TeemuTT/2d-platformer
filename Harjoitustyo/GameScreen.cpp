@@ -4,6 +4,7 @@
 #include "GameScreen.h"
 #include "TransitionState.h"
 #include "MainMenu.h"
+#include "WinState.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Constants.h"
@@ -25,6 +26,10 @@ GameScreen::GameScreen(Game* game)
     music.openFromFile("drwily.wav");
     music.setVolume(50);
     music.play();
+
+    fillRect.setPosition(sf::Vector2f(0, 0));
+    fillRect.setSize(sf::Vector2f(1500, 1500));
+    fillRect.setFillColor(sf::Color(0, 0, 0, alpha));
 }
 
 GameScreen::~GameScreen()
@@ -37,8 +42,20 @@ GameScreen::~GameScreen()
     std::cout << "GameScreen destroyed\n";
 }
 
+bool GameScreen::fadeout()
+{
+    alpha += 3;
+    fillRect.setFillColor(sf::Color(0, 0, 0, alpha));
+    if (alpha >= 255) return true;
+    return false;
+}
+
 GameState* GameScreen::update()
 {
+    if (cleared) {
+        if (fadeout()) return new WinState(game);
+        return nullptr;
+    }
     sf::Event event;
     while (game->window.pollEvent(event)) {
         if (event.type == sf::Event::KeyPressed) {
@@ -89,7 +106,8 @@ GameState* GameScreen::update()
                     game->push_state(new TransitionState(game, this));
                 }
                 else {
-                    // The end
+                    p->transition();
+                    cleared = true;
                 }
             }
         }
@@ -124,6 +142,9 @@ void GameScreen::draw(sf::RenderWindow &window)
     level.getMap()->draw(window);
     for (Entity *e : entities) {
         e->draw(window);
+    }
+    if (cleared) {
+        window.draw(fillRect);
     }
 }
 

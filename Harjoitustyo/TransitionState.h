@@ -11,6 +11,8 @@ public:
 
     virtual GameState* update();
     virtual void draw(sf::RenderWindow &window);
+
+    void setPrevious(GameState *state);
 private:
     GameState *previous;
     sf::Clock clock;

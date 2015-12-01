@@ -42,3 +42,8 @@ void TransitionState::draw(sf::RenderWindow &window)
     previous->draw(window);
     window.draw(fillRect);
 }
+
+void TransitionState::setPrevious(GameState *previous)
+{
+    this->previous = previous;
+}

@@ -19,9 +19,15 @@ public:
 private:
     sf::Music music;
     sf::Clock clock;
+    sf::RectangleShape fillRect;
+    int alpha{ 0 };
     float delta;
     float fpsclock;
     int fps;
+
+    bool cleared{ false };
+
+    bool fadeout();
 };
 
 #endif
