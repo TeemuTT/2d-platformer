@@ -7,7 +7,7 @@
 class WinState : public GameState
 {
 public:
-    WinState(Game* game);
+    WinState(Game* game, bool win);
     ~WinState();
 
     virtual GameState* update();
@@ -22,6 +22,7 @@ private:
     sf::Clock clock;
     float delta, timer;
     int alpha{ 255 };
+    bool win{ true };
 };
 
 #endif

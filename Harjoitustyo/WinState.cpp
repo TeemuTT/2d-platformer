@@ -3,16 +3,27 @@
 #include "MainMenu.h"
 #include "Constants.h"
 
-WinState::WinState(Game *game)
+WinState::WinState(Game *game, bool win)
 {
     this->game = game;
+    this->win = win;
+    game->reset_view();
     font.loadFromFile("HATTEN.ttf");
 
     label.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - 60, 40));
     label.setFont(font);
-    label.setString("Level cleared!");
+    switch (win)
+    {
+    case true:
+        label.setString("Level cleared!");
+        break;
+    case false:
+        label.setString("You have died.");
+    default:
+        break;
+    }
+    
     label.setColor(sf::Color::White);
-
     prompt.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - 60, 150));
     prompt.setFont(font);
     prompt.setString("Press Enter to continue.");

@@ -89,8 +89,12 @@ GameState* GameScreen::update()
         }
         return nullptr;
     }
-    if (cleared) {
-        if (fadeout()) return new WinState(game);
+    else if (cleared) {
+        if (fadeout()) return new WinState(game, true);
+        return nullptr;
+    }
+    else if (!alive) {
+        if (fadeout()) return new WinState(game, false);
         return nullptr;
     }
     sf::Event event;
@@ -113,11 +117,11 @@ GameState* GameScreen::update()
         fpsclock = 0;
     }
     
-    bool isAlive{ false };
+    alive = false;
     for (Entity *e : entities) {
         e->update(delta);
         if (Player *p = dynamic_cast<Player*>(e)) {
-            isAlive = true;            
+            alive = true;
             center_view(p);            
             // Are we at the end of the current tilemap? Load next one if it exists. Else quit.
             if (level.getGoal().intersects(p->getBounds())) {
@@ -131,10 +135,6 @@ GameState* GameScreen::update()
                 }
             }
         }
-    }
-    if (!isAlive) {
-        std::cout << "player is dead\n";
-        return new MainMenu(game);
     }
 
     // Erase-remove idiom
@@ -163,7 +163,7 @@ void GameScreen::draw(sf::RenderWindow &window)
     for (Entity *e : entities) {
         e->draw(window);
     }
-    if (cleared || starting) {
+    if (cleared || starting || !alive) {
         window.draw(fillRect);
     }
 }

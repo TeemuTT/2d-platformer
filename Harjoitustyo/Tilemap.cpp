@@ -24,6 +24,20 @@ bool Tilemap::load(std::string filename)
     pAttr = root->first_attribute("height");
     height = atoi(pAttr->value());
 
+    pAttr = root->first_attribute("startx");
+    start.left = atoi(pAttr->value());
+    pAttr = root->first_attribute("starty");
+    start.top = atoi(pAttr->value());
+    pAttr = root->first_attribute("endx");
+    goal.left = atoi(pAttr->value());
+    pAttr = root->first_attribute("endy");
+    goal.top = atoi(pAttr->value());
+
+    start.width = 64;
+    start.height = 64;
+    goal.width = 64;
+    goal.height = 64;
+
     xml_node<> *source = root->first_node()->first_node();
     pAttr = source->first_attribute("source");
     tilepath.append(pAttr->value());
@@ -57,18 +71,6 @@ bool Tilemap::load(std::string filepath, std::string tilepath, int width, int he
             int tilenumber = atoi(pAttr->value());
             tile = tile->next_sibling();
             if (tilenumber == 0) continue;
-            else if (tilenumber == START_TILE_ID) {
-                start.left = i * TILESIZE;
-                start.top = j * TILESIZE;
-                start.width = 64;
-                start.height = 64;
-            }
-            else if (tilenumber == GOAL_TILE_ID) {
-                goal.left = i * TILESIZE;
-                goal.top = j * TILESIZE;
-                goal.width = 64;
-                goal.height = 64;
-            }
 
             sf::Vertex *quad = &vertices[(j + i * height) * 4];
 
