@@ -18,12 +18,15 @@ private:
     sf::Font font;
     sf::Text label;
     sf::Text scoretext;
+    sf::Text nametext;
     sf::Text prompt;
     sf::RectangleShape fillRect;
     sf::Clock clock;
     float delta, timer;
     int alpha{ 255 };
     bool win{ true };
+    int score;
+    std::string name;
 };
 
 #endif

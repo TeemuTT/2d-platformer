@@ -3,10 +3,14 @@
 #include "MainMenu.h"
 #include "Constants.h"
 
+#include <fstream>
+#include <iostream>
+
 WinState::WinState(Game *game, bool win, int score)
 {
     this->game = game;
     this->win = win;
+    this->score = score;
     game->reset_view();
     font.loadFromFile("HATTEN.ttf");
 
@@ -34,14 +38,24 @@ WinState::WinState(Game *game, bool win, int score)
     scoretext.setColor(sf::Color::White);
     scoretext.setPosition(sf::Vector2f(sf::Vector2f(WINDOW_WIDTH / 2 - 100, 150)));
 
+    nametext.setFont(font);
+    nametext.setColor(sf::Color::White);
+    nametext.setPosition(sf::Vector2f(sf::Vector2f(WINDOW_WIDTH / 2 - 100, 200)));
+
     fillRect.setPosition(sf::Vector2f(0, 0));
     fillRect.setSize(sf::Vector2f(1500, 1500));
     fillRect.setFillColor(sf::Color(0, 0, 0, alpha));
 }
 
+
+
 WinState::~WinState()
 {
-
+    std::ofstream file("scores.dat", std::ios::out | std::ios::binary | std::ios::app);
+    if (file.is_open()) {
+        file << name << " ";
+        file << score;
+    }
 }
 
 GameState* WinState::update()
@@ -57,6 +71,15 @@ GameState* WinState::update()
                 return new MainMenu(game);
             }
         }
+        if (event.type == sf::Event::TextEntered) {
+            if (event.text.unicode == 8) {
+                name = name.substr(0, name.length() - 1);
+            }
+            else {
+                name += (char)event.text.unicode;
+            }
+            nametext.setString(name);
+        }
     }
 
     return nullptr;
@@ -67,6 +90,7 @@ void WinState::draw(sf::RenderWindow &window)
     window.draw(label);
     window.draw(prompt);
     window.draw(scoretext);
+    window.draw(nametext);
     window.draw(fillRect);
 }
 

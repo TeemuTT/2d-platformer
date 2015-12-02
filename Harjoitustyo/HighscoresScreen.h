@@ -7,6 +7,7 @@
 #include "GameState.h"
 #include "Button.h"
 
+#include <map>
 
 class HighscoresScreen : public GameState
 {
@@ -22,6 +23,8 @@ private:
     sf::Font font;
     sf::Text title;
     sf::Texture texture;
+    sf::Text scoretext;
+    std::map<int, std::string> scores;
 };
 
 #endif

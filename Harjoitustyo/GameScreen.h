@@ -30,8 +30,7 @@ private:
     float delta;
     float timer;
     int fps;
-    int score{ 100 };
-
+    int score;
     bool cleared{ false };
     bool starting{ true };
     bool alive{ true };

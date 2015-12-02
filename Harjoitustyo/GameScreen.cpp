@@ -13,6 +13,7 @@
 GameScreen::GameScreen(Game* game, std::string filename)
 {
     this->game = game;
+    this->score = 10;
 
     level = Level(filename);
     level.load();

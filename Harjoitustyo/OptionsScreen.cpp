@@ -14,7 +14,7 @@ OptionsScreen::OptionsScreen(Game *game)
     title.setString("Options");
     title.setColor(sf::Color::White);
 
-    buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 2, 220), sf::Vector2f(120, 30), "Back", font);
+    buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 2, 400), sf::Vector2f(120, 30), "Back", font);
     buttons.at(selection).set_focused(true);
 }
 
