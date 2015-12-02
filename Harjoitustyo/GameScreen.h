@@ -19,14 +19,18 @@ public:
     virtual void draw(sf::RenderWindow &window);
     virtual void transition();
     void quitfrompausemenu();
+    void change_score(int change);
 private:
     sf::Music music;
     sf::Clock clock;
     sf::RectangleShape fillRect;
+    sf::Font font;
+    sf::Text scoretext;
     int alpha{ 255 };
     float delta;
-    float fpsclock;
+    float timer;
     int fps;
+    int score{ 100 };
 
     bool cleared{ false };
     bool starting{ true };

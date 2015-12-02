@@ -7,7 +7,7 @@
 class WinState : public GameState
 {
 public:
-    WinState(Game* game, bool win);
+    WinState(Game* game, bool win, int score);
     ~WinState();
 
     virtual GameState* update();
@@ -17,6 +17,7 @@ private:
     sf::Music music;
     sf::Font font;
     sf::Text label;
+    sf::Text scoretext;
     sf::Text prompt;
     sf::RectangleShape fillRect;
     sf::Clock clock;

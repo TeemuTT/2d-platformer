@@ -7,6 +7,7 @@
 #include "Bullet.h"
 #include "PSDead.h"
 #include "PSSprint.h"
+#include "GameScreen.h"
 
 PSNormal::PSNormal(Player *player) : PlayerState(player)
 {
@@ -47,6 +48,7 @@ PlayerState* PSNormal::update(float &delta)
                 }
                 player->rect.setFillColor(sf::Color(230, 50, 0));
                 player->recovering = true;
+                dynamic_cast<GameScreen*>(player->gamestate)->change_score(-140);
             }
         }
     }

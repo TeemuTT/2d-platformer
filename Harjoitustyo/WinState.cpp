@@ -3,7 +3,7 @@
 #include "MainMenu.h"
 #include "Constants.h"
 
-WinState::WinState(Game *game, bool win)
+WinState::WinState(Game *game, bool win, int score)
 {
     this->game = game;
     this->win = win;
@@ -12,6 +12,7 @@ WinState::WinState(Game *game, bool win)
 
     label.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - 60, 40));
     label.setFont(font);
+    label.setColor(sf::Color::White);
     switch (win)
     {
     case true:
@@ -21,13 +22,17 @@ WinState::WinState(Game *game, bool win)
         label.setString("You have died.");
     default:
         break;
-    }
+    }    
     
-    label.setColor(sf::Color::White);
-    prompt.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - 100, 150));
+    prompt.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - 100, 350));
     prompt.setFont(font);
     prompt.setString("Press Enter to continue.");
     prompt.setColor(sf::Color::White);
+
+    scoretext.setFont(font);
+    scoretext.setString("You got a score of " + std::to_string(score));
+    scoretext.setColor(sf::Color::White);
+    scoretext.setPosition(sf::Vector2f(sf::Vector2f(WINDOW_WIDTH / 2 - 100, 150)));
 
     fillRect.setPosition(sf::Vector2f(0, 0));
     fillRect.setSize(sf::Vector2f(1500, 1500));
@@ -61,6 +66,7 @@ void WinState::draw(sf::RenderWindow &window)
 {
     window.draw(label);
     window.draw(prompt);
+    window.draw(scoretext);
     window.draw(fillRect);
 }
 

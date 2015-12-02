@@ -37,6 +37,12 @@ GameScreen::GameScreen(Game* game, std::string filename)
     fillRect.setPosition(sf::Vector2f(0, 0));
     fillRect.setSize(sf::Vector2f(1500, 1500));
     fillRect.setFillColor(sf::Color(0, 0, 0, alpha));
+
+    font.loadFromFile("HATTEN.ttf");
+    scoretext.setString("Score: " + std::to_string(score));
+    scoretext.setFont(font);
+    scoretext.setColor(sf::Color::White);
+    scoretext.setPosition(sf::Vector2f(view.getCenter().x, view.getCenter().y - 200));
 }
 
 void GameScreen::center_view(Player *p)
@@ -93,11 +99,11 @@ GameState* GameScreen::update()
         return nullptr;
     }
     else if (cleared) {
-        if (fade(false)) return new WinState(game, true);
+        if (fade(false)) return new WinState(game, true, score);
         return nullptr;
     }
     else if (!alive) {
-        if (fade(false)) return new WinState(game, false);
+        if (fade(false)) return new WinState(game, false, score);
         return nullptr;
     }
     else if (abort) {
@@ -116,13 +122,11 @@ GameState* GameScreen::update()
     if (music.getStatus() == sf::Music::Stopped) music.play();
 
     delta = clock.restart().asSeconds();
-    //fpsclock += delta;
-    //fps++;
-    //if (fpsclock >= 1) {
-    //    std::cout << "fps: " << fps << "\n";
-    //    fps = 0;
-    //    fpsclock = 0;
-    //}
+    timer += delta;
+    if (timer >= 1) {
+        score--;
+        timer = 0;
+    }
     
     alive = false;
     for (Entity *e : entities) {
@@ -163,6 +167,9 @@ GameState* GameScreen::update()
     }
     queue.clear();
 
+    scoretext.setString("Score: " + std::to_string(score));
+    scoretext.setPosition(sf::Vector2f(view.getCenter().x, view.getCenter().y - 230));
+
     return nullptr;
 }
 
@@ -175,6 +182,7 @@ void GameScreen::draw(sf::RenderWindow &window)
     if (cleared || starting || !alive) {
         window.draw(fillRect);
     }
+    window.draw(scoretext);
 }
 
 /*
@@ -205,4 +213,9 @@ void GameScreen::transition()
 void GameScreen::quitfrompausemenu()
 {
     abort = true;
+}
+
+void GameScreen::change_score(int change)
+{
+    score += change;
 }

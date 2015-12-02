@@ -2,6 +2,7 @@
 #include "Enemy.h"
 #include "Bullet.h"
 #include "Explosion.h"
+#include "GameScreen.h"
 
 Enemy::Enemy(int x, int y, float sizex, float sizey, GameState* gamestate) : Entity(x, y, gamestate)
 {
@@ -37,6 +38,7 @@ void Enemy::update(float &delta)
     }
 
     if (hitpoints <= 0) {
+        dynamic_cast<GameScreen*>(gamestate)->change_score(110);
         gamestate->add_entity(new Explosion(x, y, gamestate));
         destroy();
     }
