@@ -106,7 +106,7 @@ std::vector<std::pair<int, int>> Level::getEnemyPositions()
     std::ifstream level_data(path);
     if (level_data.is_open()) {
         while (std::getline(level_data, line)) {            
-            // Separates the line by whitespace and pushes the values to tokens vector.
+            // Separates the line by whitespace and pushes the values to a vector.
             std::string buffer;
             std::stringstream ss(line);
             std::vector<std::string> tokens;

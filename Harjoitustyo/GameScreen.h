@@ -18,6 +18,7 @@ public:
     virtual GameState* update();
     virtual void draw(sf::RenderWindow &window);
     virtual void transition();
+    void quitfrompausemenu();
 private:
     sf::Music music;
     sf::Clock clock;
@@ -30,8 +31,7 @@ private:
     bool cleared{ false };
     bool starting{ true };
     bool alive{ true };
-    //bool fadeout();
-    //bool fadein();
+    bool abort{ false };
     bool fade(bool fadein);
     void center_view(Player *p);
 };

@@ -18,6 +18,7 @@ public:
 private:
     int start_x, start_y;
     int y_vel{ 1 };
+    int x_vel{ 1 };
     
     // Shouldn't create new buffers in every instance.
     sf::SoundBuffer soundBuf;

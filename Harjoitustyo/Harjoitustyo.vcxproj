@@ -129,6 +129,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="GameState.cpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="OptionsScreen.cpp" />
+    <ClCompile Include="PauseState.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PSDead.cpp" />
     <ClCompile Include="PSNormal.cpp" />
@@ -166,6 +168,7 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="GameState.h" />
@@ -174,6 +177,7 @@
     <ClInclude Include="LevelSelect.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="OptionsScreen.h" />
+    <ClInclude Include="PauseState.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerState.h" />
     <ClInclude Include="PSDead.h" />

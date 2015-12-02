@@ -3,10 +3,11 @@
 
 #include "Player.h"
 #include "PSDead.h"
+#include "Explosion.h"
 
 PSDead::PSDead(Player *player) : PlayerState(player)
 {
-
+    player->gamestate->add_entity(new Explosion(player->x, player->y, player->gamestate));
 }
 
 PSDead::~PSDead()

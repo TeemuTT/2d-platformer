@@ -2,8 +2,6 @@
 #include "TransitionState.h"
 #include "Constants.h"
 
-#include <iostream>
-
 TransitionState::TransitionState(Game *game, GameState *previous)
 {
     destroyed = false;

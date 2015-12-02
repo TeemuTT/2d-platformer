@@ -22,7 +22,7 @@ PlayerState* PSNormal::update(float &delta)
 {
     handle_input();
 
-    // Handle PSSlide here. Could make handle_input() return PlayerState*, but it's not worth it currently.
+    // Handle PSSprint here. Could make handle_input() return PlayerState*, but it's not worth it currently.
     slide_timer += delta;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::K) && slide_timer >= SLIDE_COOLDOWN) {
         slide_timer = 0;

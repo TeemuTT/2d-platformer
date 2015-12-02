@@ -1,8 +1,7 @@
 
-#include <random>
-#include <functional>
 #include "Enemy.h"
 #include "Bullet.h"
+#include "Explosion.h"
 
 Enemy::Enemy(int x, int y, float sizex, float sizey, GameState* gamestate) : Entity(x, y, gamestate)
 {
@@ -37,11 +36,17 @@ void Enemy::update(float &delta)
         }
     }
 
-    if (hitpoints <= 0) destroy();
+    if (hitpoints <= 0) {
+        gamestate->add_entity(new Explosion(x, y, gamestate));
+        destroy();
+    }
     updateflash(delta);
 
     y += y_vel;
     if (std::abs(y - start_y) > 50) y_vel *= -1;
+
+    x += x_vel;
+    if (std::abs(x - start_x) > 10) x_vel *= -1;
 
     animation.update(*this, 0, 0);
     rect.setPosition(x, y);

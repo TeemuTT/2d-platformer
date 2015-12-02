@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Constants.h"
+#include "PauseState.h"
 
 GameScreen::GameScreen(Game* game, std::string filename)
 {
@@ -99,12 +100,15 @@ GameState* GameScreen::update()
         if (fade(false)) return new WinState(game, false);
         return nullptr;
     }
+    else if (abort) {
+        return new MainMenu(game);
+    }
 
     sf::Event event;
     while (game->window.pollEvent(event)) {
         if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Escape) {
-                return new MainMenu(game);
+            if (event.key.code == sf::Keyboard::P) {
+                game->push_state(new PauseState(game, this));
             }
         }
     }
@@ -196,4 +200,9 @@ void GameScreen::transition()
     for (auto pos : positions) {
         entities.push_back(new Enemy(pos.first, pos.second, 64.f, 64.f, this));
     }
+}
+
+void GameScreen::quitfrompausemenu()
+{
+    abort = true;
 }
