@@ -2,6 +2,8 @@
 #include "Level.h"
 
 #include <fstream>
+#include <vector>
+#include <sstream>
 
 Level::Level()
 {
@@ -18,16 +20,20 @@ Level::~Level()
 
 }
 
-void Level::load()
+/*
+Load file which contains filepaths of the levels tilemaps. Push the filepaths to a vector
+which is used to load the tilemaps in order.
+*/
+bool Level::load()
 {
-    std::ifstream file(filename);
+    std::ifstream file(filename + ".txt");
     std::string line;
     if (file.is_open()) {
         while (std::getline(file, line)) {
             tilemaps.push_back(line);
         }
     }
-    map.load(tilemaps.at(current));
+    return map.load(tilemaps.at(current));    
 }
 
 void Level::clear()
@@ -65,6 +71,9 @@ Tilemap* Level::getMap()
     return &map;
 }
 
+/*
+Load the next tilemap.
+*/
 bool Level::transition()
 {
     if (++current >= tilemaps.size()) {
@@ -73,8 +82,40 @@ bool Level::transition()
     return map.load(tilemaps.at(current));
 }
 
+/*
+Check whether this was the last tilemap of the level.
+*/
 bool Level::hasNext()
 {
     if (current + 1 >= tilemaps.size()) return false;
     else return true;
+}
+
+/*
+Read level data such as enemy positions from [levelname]_data.txt and return vector.
+*/
+std::vector<std::pair<int, int>> Level::getEnemyPositions()
+{
+    std::vector < std::pair<int, int> > positions;
+    std::string line;
+    
+    // Create filepath.
+    std::string path = tilemaps.at(current);
+    path = path.substr(0, path.find(".tmx")).append("_data.txt");
+    
+    std::ifstream level_data(path);
+    if (level_data.is_open()) {
+        while (std::getline(level_data, line)) {            
+            // Separates the line by whitespace and pushes the values to tokens vector.
+            std::string buffer;
+            std::stringstream ss(line);
+            std::vector<std::string> tokens;
+            
+            while (ss >> buffer)
+                tokens.push_back(buffer);
+            
+            positions.emplace_back(atoi(tokens[0].c_str()), atoi(tokens[1].c_str()));
+        }
+    }
+    return positions;
 }

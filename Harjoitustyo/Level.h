@@ -13,7 +13,8 @@ public:
     ~Level();
 
     void draw(sf::RenderWindow &window);
-    void load();
+    bool load();
+    std::vector<std::pair<int, int>> getEnemyPositions();
     void clear();
     std::vector<Tile> getTiles();
     sf::FloatRect getBounds();

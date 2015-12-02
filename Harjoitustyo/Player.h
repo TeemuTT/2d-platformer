@@ -22,7 +22,7 @@ public:
     void transition();
     void setTiles(std::vector<Tile> tiles);
 private:
-    std::vector<Tile> tiles; // ei näin
+    std::vector<Tile> tiles;
     PlayerState *state;
 
     // Shouldn't create new buffers in every instance.
@@ -41,10 +41,7 @@ private:
     const int BULLET_SPEED = 10;
 
     bool jumptoggled;
-
-    // Shoot testing, remove these
     bool spacetoggled;
-    int dir = 3;
 
     bool recovering{ false };
     float recoveryclock;

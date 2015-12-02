@@ -11,7 +11,8 @@ Tilemap::Tilemap()
 
 bool Tilemap::load(std::string filename)
 {
-    std::string tilepath = "../Debug/";
+    //std::string tilepath = "../Debug/";
+    std::string tilepath;
     int width, height;
 
     using namespace rapidxml;

@@ -30,8 +30,9 @@ private:
     bool cleared{ false };
     bool starting{ true };
     bool alive{ true };
-    bool fadeout();
-    bool fadein();
+    //bool fadeout();
+    //bool fadein();
+    bool fade(bool fadein);
     void center_view(Player *p);
 };
 

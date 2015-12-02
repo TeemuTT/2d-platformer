@@ -10,7 +10,7 @@ Button::Button(sf::Vector2f pos, sf::Vector2f size, std::string str, sf::Font &f
 {
     rect.setSize(size);
     rect.setPosition(pos.x - size.x / 2, pos.y - size.y / 2);
-    rect.setFillColor(sf::Color::Red);
+    rect.setFillColor(sf::Color::Transparent);
     text.setPosition(pos.x - size.x / 2, pos.y - size.y / 2);
     text.setString(str);
     text.setFont(font);

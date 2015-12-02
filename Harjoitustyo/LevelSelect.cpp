@@ -17,7 +17,7 @@ LevelSelect::LevelSelect(Game *game)
     text2.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - 60, 150));
     text2.setFont(font);
     text2.setString("Stage 1");
-    text2.setColor(sf::Color::White);
+    text2.setColor(sf::Color::Blue);
 
 }
 
@@ -35,7 +35,7 @@ GameState* LevelSelect::update()
                 return new MainMenu(game);
             }
             else if (event.key.code == sf::Keyboard::Return) {
-                return new GameScreen(game, "level_1.txt");
+                return new GameScreen(game, "level_1");
             }
         }
     }

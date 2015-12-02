@@ -24,7 +24,7 @@ WinState::WinState(Game *game, bool win)
     }
     
     label.setColor(sf::Color::White);
-    prompt.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - 60, 150));
+    prompt.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - 100, 150));
     prompt.setFont(font);
     prompt.setString("Press Enter to continue.");
     prompt.setColor(sf::Color::White);

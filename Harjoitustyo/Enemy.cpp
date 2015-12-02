@@ -1,19 +1,19 @@
 
-#include <iostream>
-
+#include <random>
+#include <functional>
 #include "Enemy.h"
 #include "Bullet.h"
 
 Enemy::Enemy(int x, int y, float sizex, float sizey, GameState* gamestate) : Entity(x, y, gamestate)
 {
-    
     rect.setSize(sf::Vector2f(sizex, sizey));
     rect.setPosition(x, y);
     start_x = x;
     start_y = y;
     hitpoints = 3;
-    
+
     animation.create_animation("zappy.png", 4, 50, 50, AnimationHandler::IDLE, true);
+    animation.update(*this, 0, 0, AnimationHandler::IDLE);
 
     soundBuf.loadFromFile("hit.wav");
     hitsound.setBuffer(soundBuf);

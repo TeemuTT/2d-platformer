@@ -18,14 +18,14 @@ MainMenu::MainMenu(Game *game)
     title.setString("Main Menu");
     title.setColor(sf::Color::White);
 
-    buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 2, 100), sf::Vector2f(120, 30), "Start", font);
-    buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 2, 140), sf::Vector2f(120, 30), "Options", font);
-    buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 2, 180), sf::Vector2f(120, 30), "Highscores", font);
-    buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 2, 220), sf::Vector2f(120, 30), "Quit", font);
+    buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 2, 140), sf::Vector2f(120, 30), "Start", font);
+    buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 2, 180), sf::Vector2f(120, 30), "Options", font);
+    buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 2, 220), sf::Vector2f(120, 30), "Highscores", font);
+    buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 2, 260), sf::Vector2f(120, 30), "Quit", font);
     buttons.at(selection).set_focused(true);
 
     music.openFromFile("menu.wav");
-    music.setVolume(50);
+    music.setVolume(33);
     music.play();
 }
 
@@ -38,7 +38,10 @@ GameState* MainMenu::update()
 {
     sf::Event event;
     while (game->window.pollEvent(event)) {
-        if (event.type == sf::Event::KeyPressed) {
+        if (event.type == sf::Event::Closed) {
+            destroyed = true;
+        }
+        else if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Escape) {
                 destroyed = true;
             }

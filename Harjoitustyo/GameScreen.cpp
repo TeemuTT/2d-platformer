@@ -11,11 +11,14 @@
 
 GameScreen::GameScreen(Game* game, std::string filename)
 {
-    destroyed = false;
     this->game = game;
 
     level = Level(filename);
     level.load();
+    std::vector<std::pair<int, int>> positions = level.getEnemyPositions();
+    for (auto pos : positions) {
+        entities.push_back(new Enemy(pos.first, pos.second, 64.f, 64.f, this));
+    }
 
     Player *player = new Player(0, 0, 50, 64, this);
     player->setPosition(level.getStart());
@@ -27,7 +30,7 @@ GameScreen::GameScreen(Game* game, std::string filename)
     game->set_view(view);
 
     music.openFromFile("drwily.wav");
-    music.setVolume(50);
+    music.setVolume(33);
     music.play();
 
     fillRect.setPosition(sf::Vector2f(0, 0));
@@ -65,38 +68,38 @@ GameScreen::~GameScreen()
     std::cout << "GameScreen destroyed\n";
 }
 
-bool GameScreen::fadeout()
+/*
+Screen fade effect.
+*/
+bool GameScreen::fade(bool fadein)
 {
-    alpha += 3;
-    fillRect.setFillColor(sf::Color(0, 0, 0, alpha));
-    if (alpha >= 255) return true;
-    return false;
-}
-
-bool GameScreen::fadein()
-{
-    alpha -= 3;
+    fadein ? alpha -= 3 : alpha += 3;
     fillRect.setFillColor(sf::Color(0, 0, 0, alpha));
     if (alpha <= 0) return true;
+    
+    if (fadein) {
+        if (alpha <= 0) return true;
+    }
+    else if (alpha >= 255) return true;
+
     return false;
 }
 
 GameState* GameScreen::update()
 {
     if (starting) {
-        if (fadein()) {
-            starting = false;
-        }
+        if (fade(true)) starting = false;
         return nullptr;
     }
     else if (cleared) {
-        if (fadeout()) return new WinState(game, true);
+        if (fade(false)) return new WinState(game, true);
         return nullptr;
     }
     else if (!alive) {
-        if (fadeout()) return new WinState(game, false);
+        if (fade(false)) return new WinState(game, false);
         return nullptr;
     }
+
     sf::Event event;
     while (game->window.pollEvent(event)) {
         if (event.type == sf::Event::KeyPressed) {
@@ -109,13 +112,13 @@ GameState* GameScreen::update()
     if (music.getStatus() == sf::Music::Stopped) music.play();
 
     delta = clock.restart().asSeconds();
-    fpsclock += delta;
-    fps++;
-    if (fpsclock >= 1) {
-        std::cout << "fps: " << fps << "\n";
-        fps = 0;
-        fpsclock = 0;
-    }
+    //fpsclock += delta;
+    //fps++;
+    //if (fpsclock >= 1) {
+    //    std::cout << "fps: " << fps << "\n";
+    //    fps = 0;
+    //    fpsclock = 0;
+    //}
     
     alive = false;
     for (Entity *e : entities) {
@@ -137,6 +140,7 @@ GameState* GameScreen::update()
         }
     }
 
+    // Remove destroyed entities.
     // Erase-remove idiom
     // https://en.wikipedia.org/wiki/Erase%E2%80%93remove_idiom
     entities.erase( std::remove_if(std::begin(entities), std::end(entities),
@@ -149,6 +153,7 @@ GameState* GameScreen::update()
                     }),
                     std::end(entities));
 
+    // Add new entities from queue.
     for (Entity *e : queue) {
         entities.push_back(std::move(e));
     }
@@ -168,16 +173,27 @@ void GameScreen::draw(sf::RenderWindow &window)
     }
 }
 
+/*
+Transition to the next tilemap. Clear entities and spawn new ones.
+*/
 void GameScreen::transition()
 {
     level.transition();
 
+    Player *player = nullptr;
     for (Entity *e : entities) {
-        if (Player *p = dynamic_cast<Player*>(e)) {
-            p->setPosition(level.getStart());
-            p->setTiles(level.getTiles());
-            center_view(p);
+        if (player = dynamic_cast<Player*>(e)) {
+            player->setPosition(level.getStart());
+            player->setTiles(level.getTiles());
+            center_view(player);
             break;
         }
+    }
+    entities.clear();
+    entities.push_back(player);
+
+    std::vector<std::pair<int, int>> positions = level.getEnemyPositions();
+    for (auto pos : positions) {
+        entities.push_back(new Enemy(pos.first, pos.second, 64.f, 64.f, this));
     }
 }

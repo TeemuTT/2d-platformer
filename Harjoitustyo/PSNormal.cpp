@@ -68,7 +68,6 @@ PlayerState* PSNormal::update(float &delta)
 
 void PSNormal::handle_vertical()
 {
-    //auto &tiles = player->gamestate->getTiles(); // ei näin
     player->vy += player->GRAVITY;
 
     if (player->vy < 0) {
@@ -107,11 +106,10 @@ void PSNormal::handle_vertical()
 
 void PSNormal::handle_input()
 {
-    auto &tiles = player->gamestate->getTiles(); // ei näin
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
         player->vx = -player->SPEED;
         int maxpixels = INT_MIN;
-        for (Tile t : tiles) {
+        for (Tile t : player->tiles) {
             if (t.bottom() <= player->top()) continue;
             if (t.top() >= player->bottom()) continue;
             if (t.left() >= player->right()) continue;
@@ -119,12 +117,13 @@ void PSNormal::handle_input()
             if (distance > maxpixels) maxpixels = distance;
         }
         player->x += std::max((int)player->vx, maxpixels);
-        player->heading = -1; // tmp for shooting
+        player->rect.setPosition(player->x, player->y);
+        player->heading = -1;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
         player->vx = player->SPEED;
         int maxpixels = INT_MAX;
-        for (Tile t : tiles) {
+        for (Tile t : player->tiles) {
             if (t.bottom() <= player->top()) continue;
             if (t.top() >= player->bottom()) continue;
             if (t.right() <= player->left()) continue;
@@ -132,7 +131,8 @@ void PSNormal::handle_input()
             if (distance < maxpixels) maxpixels = distance;
         }
         player->x += std::min((int)player->vx, maxpixels);
-        player->heading = 1; // tmp for shooting
+        player->rect.setPosition(player->x, player->y);
+        player->heading = 1;
     }
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) player->vx = 0;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) player->vx = 0;
