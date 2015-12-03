@@ -1,8 +1,10 @@
 #ifndef __LEVELSELECT__
 #define __LEVELSELECT__
 
+#include "Button.h"
 #include "GameState.h"
 #include "SFML/Audio.hpp"
+#include <vector>
 
 class LevelSelect : public GameState
 {
@@ -13,10 +15,10 @@ public:
     virtual GameState* update();
     virtual void draw(sf::RenderWindow &window);
 private:
-    int selection{ 0 };
+    int selection{ 1 };
+    std::vector<Button> buttons;
     sf::Font font;
     sf::Text text;
-    sf::Text text2;
     sf::Music music;
 };
 

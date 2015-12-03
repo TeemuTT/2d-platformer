@@ -20,6 +20,7 @@ private:
     sf::Text scoretext;
     sf::Text nametext;
     sf::Text prompt;
+    sf::Text nameprompt;
     sf::RectangleShape fillRect;
     sf::Clock clock;
     float delta, timer;

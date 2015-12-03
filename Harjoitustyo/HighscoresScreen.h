@@ -18,8 +18,7 @@ public:
     virtual GameState* update();
     virtual void draw(sf::RenderWindow &window);
 private:
-    int selection{ 0 };
-    std::vector<Button> buttons;
+    Button button;
     sf::Font font;
     sf::Text title;
     sf::Texture texture;

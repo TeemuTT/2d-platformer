@@ -13,7 +13,7 @@
 GameScreen::GameScreen(Game* game, std::string filename)
 {
     this->game = game;
-    this->score = 10;
+    this->score = 100;
 
     level = Level(filename);
     level.load();
@@ -43,7 +43,7 @@ GameScreen::GameScreen(Game* game, std::string filename)
     scoretext.setString("Score: " + std::to_string(score));
     scoretext.setFont(font);
     scoretext.setColor(sf::Color::White);
-    scoretext.setPosition(sf::Vector2f(view.getCenter().x, view.getCenter().y - 200));
+    scoretext.setPosition(sf::Vector2f(view.getCenter().x - scoretext.getGlobalBounds().width / 2, view.getCenter().y - WINDOW_HEIGHT / 2));
 }
 
 void GameScreen::center_view(Player *p)
@@ -169,7 +169,7 @@ GameState* GameScreen::update()
     queue.clear();
 
     scoretext.setString("Score: " + std::to_string(score));
-    scoretext.setPosition(sf::Vector2f(view.getCenter().x, view.getCenter().y - 230));
+    scoretext.setPosition(sf::Vector2f(view.getCenter().x - scoretext.getGlobalBounds().width / 2, view.getCenter().y - WINDOW_HEIGHT / 2));
 
     return nullptr;
 }

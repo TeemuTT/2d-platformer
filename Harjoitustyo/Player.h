@@ -12,6 +12,7 @@ class Player : public Entity
     friend class PSDead;
     friend class PSSprint;
     friend class PSTransition;
+    friend class PSDemo;
 public:
     Player(int x, int y, float sizex, float sizey, GameState* gamestate);
     ~Player();
@@ -21,6 +22,7 @@ public:
 
     void transition();
     void setTiles(std::vector<Tile> tiles);
+    void setDemostate();
 private:
     std::vector<Tile> tiles;
     PlayerState *state;

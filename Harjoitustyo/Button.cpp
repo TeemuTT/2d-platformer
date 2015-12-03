@@ -8,22 +8,22 @@ Button::Button()
 
 Button::Button(sf::Vector2f pos, sf::Vector2f size, std::string str, sf::Font &font)
 {
-    rect.setSize(size);
-    rect.setPosition(pos.x - size.x / 2, pos.y - size.y / 2);
-    rect.setFillColor(sf::Color::Transparent);
-    text.setPosition(pos.x - size.x / 2, pos.y - size.y / 2);
-    text.setString(str);
     text.setFont(font);
+    text.setString(str);
+    text.setPosition(pos.x - text.getGlobalBounds().width / 2, pos.y);
+    rect.setSize(size);
+    rect.setFillColor(sf::Color::Transparent);
+    rect.setPosition(text.getPosition());
 }
 
 Button::Button(sf::Vector2f pos, sf::Vector2f size, sf::Color color, std::string str, sf::Font &font)
 {
-    rect.setSize(size);
-    rect.setPosition(pos.x - size.x / 2, pos.y - size.y / 2);
-    rect.setFillColor(color);
-    text.setPosition(pos.x - size.x / 2, pos.y - size.y / 2);
-    text.setString(str);
     text.setFont(font);
+    text.setString(str);
+    text.setPosition(pos.x - text.getGlobalBounds().width / 2, pos.y);
+    rect.setSize(size);
+    rect.setFillColor(color);
+    rect.setPosition(text.getPosition());
 }
 
 Button::~Button()

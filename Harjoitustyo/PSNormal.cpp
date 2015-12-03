@@ -1,6 +1,4 @@
 
-#include <iostream>
-
 #include "Enemy.h"
 #include "Player.h"
 #include "PSNormal.h"
@@ -16,7 +14,7 @@ PSNormal::PSNormal(Player *player) : PlayerState(player)
 
 PSNormal::~PSNormal()
 {
-    std::cout << "PSNormal stop\n";
+
 }
 
 PlayerState* PSNormal::update(float &delta)
@@ -147,13 +145,13 @@ void PSNormal::handle_input()
     }
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) player->jumptoggled = true;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && player->spacetoggled) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::J) && player->spacetoggled) {
         int bx = player->getOrigin().x + player->heading * player->rect.getSize().x - 4; // magic number: bullet width
         int by = player->getOrigin().y;
         player->gamestate->add_entity(new Bullet(bx, by, sf::Vector2f(player->heading * player->BULLET_SPEED, 0), player->gamestate));
         player->spacetoggled = false;
         player->shootsound.play();
     }
-    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) player->spacetoggled = true;
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::J)) player->spacetoggled = true;
 
 }

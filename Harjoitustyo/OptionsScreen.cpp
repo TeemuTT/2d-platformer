@@ -9,12 +9,12 @@ OptionsScreen::OptionsScreen(Game *game)
     this->game = game;
     font.loadFromFile("HATTEN.ttf");
 
-    title.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - 60, 40));
     title.setFont(font);
     title.setString("Options");
     title.setColor(sf::Color::White);
+    title.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - title.getGlobalBounds().width / 2, 40));
 
-    buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 2, 400), sf::Vector2f(120, 30), "Back", font);
+    buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 4, 400), sf::Vector2f(120, 30), "Back", font);
     buttons.at(selection).set_focused(true);
 }
 
@@ -32,7 +32,7 @@ GameState* OptionsScreen::update()
                 destroyed = true;
             }
             else if (event.key.code == sf::Keyboard::Return) {
-                destroyed = true; // Temporary
+                destroyed = true;
             }
         }
     }

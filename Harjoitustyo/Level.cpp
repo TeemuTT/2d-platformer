@@ -97,24 +97,17 @@ Read level data such as enemy positions from [levelname]_data.txt and return vec
 std::vector<std::pair<int, int>> Level::getEnemyPositions()
 {
     std::vector < std::pair<int, int> > positions;
-    std::string line;
-    
+
     // Create filepath.
     std::string path = tilemaps.at(current);
     path = path.substr(0, path.find(".tmx")).append("_data.txt");
-    
+
     std::ifstream level_data(path);
     if (level_data.is_open()) {
-        while (std::getline(level_data, line)) {            
-            // Separates the line by whitespace and pushes the values to a vector.
-            std::string buffer;
-            std::stringstream ss(line);
-            std::vector<std::string> tokens;
-            
-            while (ss >> buffer)
-                tokens.push_back(buffer);
-            
-            positions.emplace_back(atoi(tokens[0].c_str()), atoi(tokens[1].c_str()));
+        int x, y;
+        while (level_data >> x) {
+            level_data >> y;
+            positions.emplace_back(x, y);
         }
     }
     return positions;

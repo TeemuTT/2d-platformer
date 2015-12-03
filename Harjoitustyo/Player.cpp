@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "PSNormal.h"
 #include "PSTransition.h"
+#include "PSDemo.h"
 
 Player::Player(int x, int y, float sizex, float sizey, GameState* gamestate) : Entity(x, y, gamestate)
 {
@@ -38,6 +39,12 @@ Player::~Player()
     delete state;
 }
 
+
+void Player::setDemostate()
+{
+    delete state;
+    state = new PSDemo(this);
+}
 
 void Player::update(float &delta)
 {

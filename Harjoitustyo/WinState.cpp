@@ -28,19 +28,24 @@ WinState::WinState(Game *game, bool win, int score)
         break;
     }    
     
-    prompt.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - 100, 350));
     prompt.setFont(font);
     prompt.setString("Press Enter to continue.");
     prompt.setColor(sf::Color::White);
+    prompt.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - prompt.getGlobalBounds().width / 2, 350));
+
+    nameprompt.setFont(font);
+    nameprompt.setString("Enter a name: ");
+    nameprompt.setColor(sf::Color::White);
+    nameprompt.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - nameprompt.getGlobalBounds().width, 200));
 
     scoretext.setFont(font);
     scoretext.setString("You got a score of " + std::to_string(score));
     scoretext.setColor(sf::Color::White);
-    scoretext.setPosition(sf::Vector2f(sf::Vector2f(WINDOW_WIDTH / 2 - 100, 150)));
+    scoretext.setPosition(sf::Vector2f(sf::Vector2f(WINDOW_WIDTH / 2 - scoretext.getGlobalBounds().width / 2, 150)));
 
     nametext.setFont(font);
     nametext.setColor(sf::Color::White);
-    nametext.setPosition(sf::Vector2f(sf::Vector2f(WINDOW_WIDTH / 2 - 100, 200)));
+    nametext.setPosition(sf::Vector2f(sf::Vector2f(WINDOW_WIDTH / 2 - nametext.getGlobalBounds().width / 2, 200)));
 
     fillRect.setPosition(sf::Vector2f(0, 0));
     fillRect.setSize(sf::Vector2f(1500, 1500));
@@ -51,6 +56,7 @@ WinState::WinState(Game *game, bool win, int score)
 
 WinState::~WinState()
 {
+    if (name.length() == 0) return;
     std::ofstream file("scores.dat", std::ios::out | std::ios::binary | std::ios::app);
     if (file.is_open()) {
         file << name << " ";
@@ -75,7 +81,7 @@ GameState* WinState::update()
             if (event.text.unicode == 8) {
                 name = name.substr(0, name.length() - 1);
             }
-            else {
+            else if (name.length() < 15) {
                 name += (char)event.text.unicode;
             }
             nametext.setString(name);
@@ -91,6 +97,7 @@ void WinState::draw(sf::RenderWindow &window)
     window.draw(prompt);
     window.draw(scoretext);
     window.draw(nametext);
+    window.draw(nameprompt);
     window.draw(fillRect);
 }
 

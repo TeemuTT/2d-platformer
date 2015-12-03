@@ -23,10 +23,6 @@ private:
     sf::Text title;
     sf::Texture texture;
     sf::Music music;
-
-    bool escape_toggled{ false };
-    bool up_toggled{ false };
-    bool down_toggled{ false };
 };
 
 #endif
