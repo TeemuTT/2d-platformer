@@ -1,23 +1,24 @@
 
-#include <iostream>
-
+#include "Player.h"
 #include "MainMenu.h"
+#include "Constants.h"
+#include "Utilities.h"
 #include "LevelSelect.h"
 #include "OptionsScreen.h"
 #include "HighscoresScreen.h"
-#include "Constants.h"
-#include "Player.h"
 
 MainMenu::MainMenu(Game *game)
 {
     this->game = game;
     game->reset_view();
     font.loadFromFile("HATTEN.ttf");
+    title = centered_text("Main Menu", WINDOW_WIDTH / 2, 40, font);
 
-    title.setFont(font);
-    title.setString("Main Menu");
-    title.setColor(sf::Color::White);
-    title.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - title.getGlobalBounds().width / 2, 40));
+    borders.setPosition(sf::Vector2f(WINDOW_WIDTH / 4 - 70, 130));
+    borders.setSize(sf::Vector2f(140, 180));
+    borders.setOutlineThickness(2.f);
+    borders.setOutlineColor(sf::Color::White);
+    borders.setFillColor(sf::Color::Transparent);
 
     buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 4, 140), sf::Vector2f(120, 30), "Start", font);
     buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 4, 180), sf::Vector2f(120, 30), "Options", font);
@@ -25,9 +26,9 @@ MainMenu::MainMenu(Game *game)
     buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 4, 260), sf::Vector2f(120, 30), "Quit", font);
     buttons.at(selection).set_focused(true);
 
-    music.openFromFile("menu.wav");
+    music.openFromFile("sounds/menu.wav");
     music.setVolume(33);
-    music.play();
+    //music.play();
 
     Player *player = new Player(WINDOW_WIDTH / 3 * 2, WINDOW_HEIGHT / 2, 64.f, 64.f, this);
     player->setDemostate();
@@ -36,53 +37,58 @@ MainMenu::MainMenu(Game *game)
 
 MainMenu::~MainMenu()
 {
+    music.stop();
     while (!entities.empty()) {
         delete entities.back();
         entities.pop_back();
-        //std::cout << "deleted entity.\n";
     }
-    std::cout << "mainmenu destroyed\n";
 }
 
 GameState* MainMenu::update()
 {
+    if (music.getStatus() == sf::Music::Stopped) music.play();
+
     sf::Event event;
     while (game->window.pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
-            destroyed = true;
-        }
+        if (event.type == sf::Event::Closed)  destroyed = true;
         else if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Escape) {
+            switch (event.key.code)
+            {
+            case sf::Keyboard::Escape:
                 destroyed = true;
-            }
-            else if (event.key.code == sf::Keyboard::Up) {
-                buttons.at(selection).set_focused(false);
-                selection--;
-                if (selection < 0) selection = 3;
+                break;
+
+            case sf::Keyboard::Up:
+                buttons.at(selection--).set_focused(false);
+                if (selection < 0) selection = buttons.size() - 1;
                 buttons.at(selection).set_focused(true);
-            }
-            else if (event.key.code == sf::Keyboard::Down) {
-                buttons.at(selection).set_focused(false);
-                selection++;
-                if (selection > 3) selection = 0;
+                break;
+
+            case sf::Keyboard::Down:
+                buttons.at(selection++).set_focused(false);
+                if (selection >= buttons.size()) selection = 0;
                 buttons.at(selection).set_focused(true);
-            }
-            else if (event.key.code == sf::Keyboard::Return) {
+                break;
+
+            case sf::Keyboard::Return:
                 switch (selection)
                 {
                 case 0:
                     return new LevelSelect(game);
-                    break;
+
                 case 1:
                     game->push_state(new OptionsScreen(game));
                     break;
+
                 case 2:
                     game->push_state(new HighscoresScreen(game));
                     break;
+
                 case 3:
                     destroyed = true;
                     break;
                 }
+                break;
             }
         }
     }
@@ -95,9 +101,8 @@ GameState* MainMenu::update()
 
 void MainMenu::draw(sf::RenderWindow &window)
 {
-    for (Button b : buttons) {
-        b.draw(window);
-    }
     window.draw(title);
+    window.draw(borders);
+    for (Button b : buttons) b.draw(window);
     for (Entity *e : entities) e->draw(window);
 }

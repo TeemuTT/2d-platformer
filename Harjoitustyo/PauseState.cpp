@@ -1,6 +1,7 @@
 
-#include "PauseState.h"
 #include "Constants.h"
+#include "Utilities.h"
+#include "PauseState.h"
 #include "GameScreen.h"
 
 PauseState::PauseState(Game *game, GameState *previous)
@@ -9,10 +10,7 @@ PauseState::PauseState(Game *game, GameState *previous)
     this->previous = previous;
 
     font.loadFromFile("HATTEN.ttf");
-    text.setFont(font);
-    text.setString("Paused");
-    text.setPosition(previous->getView().getCenter());
-    text.setColor(sf::Color::White);
+    text = centered_text("Paused", previous->getView().getCenter().x, previous->getView().getCenter().y, font);
 }
 
 PauseState::~PauseState()
@@ -25,12 +23,16 @@ GameState* PauseState::update()
     sf::Event event;
     while (game->window.pollEvent(event)) {
         if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::P) {
+            switch (event.key.code)
+            {
+            case sf::Keyboard::P:
                 destroyed = true;
-            }
-            else if (event.key.code == sf::Keyboard::Escape) {
+                break;
+
+            case sf::Keyboard::Escape:
                 dynamic_cast<GameScreen*>(previous)->quitfrompausemenu();
                 destroyed = true;
+                break;
             }
         }
     }

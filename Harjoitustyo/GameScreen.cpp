@@ -1,14 +1,13 @@
 
-#include <iostream>
-
-#include "GameScreen.h"
-#include "TransitionState.h"
+#include "Enemy.h"
+#include "Player.h"
 #include "MainMenu.h"
 #include "WinState.h"
-#include "Player.h"
-#include "Enemy.h"
+#include "Utilities.h"
 #include "Constants.h"
 #include "PauseState.h"
+#include "GameScreen.h"
+#include "TransitionState.h"
 
 GameScreen::GameScreen(Game* game, std::string filename)
 {
@@ -17,10 +16,9 @@ GameScreen::GameScreen(Game* game, std::string filename)
 
     level = Level(filename);
     level.load();
-    std::vector<std::pair<int, int>> positions = level.getEnemyPositions();
-    for (auto pos : positions) {
-        entities.push_back(new Enemy(pos.first, pos.second, 64.f, 64.f, this));
-    }
+    auto positions = level.getEnemyPositions();
+    for (auto pos : positions)
+        entities.push_back(new Enemy(pos.first, pos.second, 64, 64, this));
 
     Player *player = new Player(0, 0, 50, 64, this);
     player->setPosition(level.getStart());
@@ -31,54 +29,29 @@ GameScreen::GameScreen(Game* game, std::string filename)
     center_view(player);
     game->set_view(view);
 
-    music.openFromFile("drwily.wav");
+    music.openFromFile("sounds/drwily.wav");
     music.setVolume(33);
     music.play();
 
+    // fillRect is used for screen fading.
     fillRect.setPosition(sf::Vector2f(0, 0));
     fillRect.setSize(sf::Vector2f(1500, 1500));
     fillRect.setFillColor(sf::Color(0, 0, 0, alpha));
 
     font.loadFromFile("HATTEN.ttf");
-    scoretext.setString("Score: " + std::to_string(score));
-    scoretext.setFont(font);
-    scoretext.setColor(sf::Color::White);
-    scoretext.setPosition(sf::Vector2f(view.getCenter().x - scoretext.getGlobalBounds().width / 2, view.getCenter().y - WINDOW_HEIGHT / 2));
-}
-
-void GameScreen::center_view(Player *p)
-{
-    view.setCenter(p->getOrigin());
-    int max_x = level.getBounds().left + level.getBounds().width;
-    int max_y = level.getBounds().top + level.getBounds().height;
-    if (view.getCenter().x < WINDOW_WIDTH / 2) {
-        view.setCenter(sf::Vector2f(WINDOW_WIDTH / 2, view.getCenter().y));
-    }
-    else if (view.getCenter().x > max_x - WINDOW_WIDTH / 2) {
-        view.setCenter(sf::Vector2f(max_x - WINDOW_WIDTH / 2, view.getCenter().y));
-    }
-    if (view.getCenter().y < WINDOW_HEIGHT / 2) {
-        view.setCenter(sf::Vector2f(view.getCenter().x, WINDOW_HEIGHT / 2));
-    }
-    else if (view.getCenter().y > max_y - WINDOW_HEIGHT / 2) {
-        view.setCenter(sf::Vector2f(view.getCenter().x, max_y - WINDOW_HEIGHT / 2));
-    }
-    game->set_view(view);
+    scoretext = centered_text("Score: " + std::to_string(score), view.getCenter().x, view.getCenter().y - WINDOW_HEIGHT / 2, font);
 }
 
 GameScreen::~GameScreen()
 {
+    music.stop();
     while (!entities.empty()) {
         delete entities.back();
         entities.pop_back();
-        //std::cout << "deleted entity.\n";
     }
-    std::cout << "GameScreen destroyed\n";
 }
 
-/*
-Screen fade effect.
-*/
+// Screen fade effect.
 bool GameScreen::fade(bool fadein)
 {
     fadein ? alpha -= 3 : alpha += 3;
@@ -95,46 +68,40 @@ bool GameScreen::fade(bool fadein)
 
 GameState* GameScreen::update()
 {
-    if (starting) {
-        if (fade(true)) starting = false;
+    switch (status) {
+    case START:
+        if (fade(true)) status = NORMAL;
         return nullptr;
-    }
-    else if (cleared) {
-        if (fade(false)) return new WinState(game, true, score);
+    case END:
+        if (fade(false)) return new WinState(game, alive, score);
         return nullptr;
-    }
-    else if (!alive) {
-        if (fade(false)) return new WinState(game, false, score);
-        return nullptr;
-    }
-    else if (abort) {
+    case QUIT:
         return new MainMenu(game);
     }
 
-    sf::Event event;
-    while (game->window.pollEvent(event)) {
-        if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::P) {
-                game->push_state(new PauseState(game, this));
-            }
-        }
-    }
-
     if (music.getStatus() == sf::Music::Stopped) music.play();
-
     delta = clock.restart().asSeconds();
+
+    // Decrement score every second.
     timer += delta;
     if (timer >= 1) {
         score--;
         timer = 0;
     }
-    
+
+    sf::Event event;
+    while (game->window.pollEvent(event))
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
+            game->push_state(new PauseState(game, this));
+
+    status = END;
     alive = false;
     for (Entity *e : entities) {
         e->update(delta);
         if (Player *p = dynamic_cast<Player*>(e)) {
+            status = NORMAL;
             alive = true;
-            center_view(p);            
+            center_view(p);
             // Are we at the end of the current tilemap? Load next one if it exists. Else quit.
             if (level.getGoal().intersects(p->getBounds())) {
                 if (level.hasNext()) {
@@ -143,7 +110,7 @@ GameState* GameScreen::update()
                 }
                 else {
                     p->transition();
-                    cleared = true;
+                    status = END;
                 }
             }
         }
@@ -163,13 +130,11 @@ GameState* GameScreen::update()
                     std::end(entities));
 
     // Add new entities from queue.
-    for (Entity *e : queue) {
-        entities.push_back(std::move(e));
-    }
+    for (Entity *e : queue) entities.push_back(std::move(e));
     queue.clear();
 
     scoretext.setString("Score: " + std::to_string(score));
-    scoretext.setPosition(sf::Vector2f(view.getCenter().x - scoretext.getGlobalBounds().width / 2, view.getCenter().y - WINDOW_HEIGHT / 2));
+    scoretext.setPosition(sf::Vector2f(view.getCenter().x, view.getCenter().y - WINDOW_HEIGHT / 2));
 
     return nullptr;
 }
@@ -177,18 +142,13 @@ GameState* GameScreen::update()
 void GameScreen::draw(sf::RenderWindow &window)
 {
     level.getMap()->draw(window);
-    for (Entity *e : entities) {
-        e->draw(window);
-    }
-    if (cleared || starting || !alive) {
-        window.draw(fillRect);
-    }
+    for (Entity *e : entities)  e->draw(window);
+    if (status != NORMAL) window.draw(fillRect);
     window.draw(scoretext);
 }
 
-/*
-Transition to the next tilemap. Clear entities and spawn new ones.
-*/
+
+// Transition to the next tilemap. Clear entities and spawn new ones.
 void GameScreen::transition()
 {
     level.transition();
@@ -213,10 +173,31 @@ void GameScreen::transition()
 
 void GameScreen::quitfrompausemenu()
 {
-    abort = true;
+    status = QUIT;
 }
 
 void GameScreen::change_score(int change)
 {
     score += change;
+}
+
+// Centers the view on the player's origin.
+void GameScreen::center_view(Player *p)
+{
+    view.setCenter(p->getOrigin());
+    int max_x = level.getBounds().left + level.getBounds().width;
+    int max_y = level.getBounds().top + level.getBounds().height;
+    int view_x = view.getCenter().x, view_y = view.getCenter().y;
+
+    if (view_x < WINDOW_WIDTH / 2)
+        view.setCenter(sf::Vector2f(WINDOW_WIDTH / 2, view.getCenter().y));
+    else if (view_x > max_x - WINDOW_WIDTH / 2)
+        view.setCenter(sf::Vector2f(max_x - WINDOW_WIDTH / 2, view.getCenter().y));
+
+    if (view_y < WINDOW_HEIGHT / 2)
+        view.setCenter(sf::Vector2f(view.getCenter().x, WINDOW_HEIGHT / 2));
+    else if (view_y > max_y - WINDOW_HEIGHT / 2)
+        view.setCenter(sf::Vector2f(view.getCenter().x, max_y - WINDOW_HEIGHT / 2));
+
+    game->set_view(view);
 }

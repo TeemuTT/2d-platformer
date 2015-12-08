@@ -40,3 +40,8 @@ sf::FloatRect GameState::getBounds()
 {
     return level.getBounds();
 }
+
+AssetManager* GameState::get_asset_manager()
+{
+    return game->get_asset_manager();
+}

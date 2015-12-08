@@ -1,13 +1,13 @@
 #ifndef __HIGHSCORESSCREEN__
 #define __HIGHSCORESSCREEN__
 
-
-#include <vector>
-#include "SFML/Graphics.hpp"
-#include "GameState.h"
-#include "Button.h"
-
 #include <map>
+#include <vector>
+
+#include "SFML/Graphics.hpp"
+
+#include "Button.h"
+#include "GameState.h"
 
 class HighscoresScreen : public GameState
 {
@@ -21,8 +21,8 @@ private:
     Button button;
     sf::Font font;
     sf::Text title;
-    sf::Texture texture;
     sf::Text scoretext;
+    sf::Texture texture;
     std::map<int, std::string> scores;
 };
 

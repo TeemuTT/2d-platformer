@@ -1,18 +1,13 @@
 
-#include <iostream>
-
-#include "OptionsScreen.h"
+#include "Utilities.h"
 #include "Constants.h"
+#include "OptionsScreen.h"
 
 OptionsScreen::OptionsScreen(Game *game)
 {
     this->game = game;
     font.loadFromFile("HATTEN.ttf");
-
-    title.setFont(font);
-    title.setString("Options");
-    title.setColor(sf::Color::White);
-    title.setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - title.getGlobalBounds().width / 2, 40));
+    title = centered_text("Option", WINDOW_WIDTH / 2, 40, font);
 
     buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 4, 400), sf::Vector2f(120, 30), "Back", font);
     buttons.at(selection).set_focused(true);
@@ -20,7 +15,7 @@ OptionsScreen::OptionsScreen(Game *game)
 
 OptionsScreen::~OptionsScreen()
 {
-    std::cout << "OptionsScreen destroyed\n";
+
 }
 
 GameState* OptionsScreen::update()
@@ -28,11 +23,12 @@ GameState* OptionsScreen::update()
     sf::Event event;
     while (game->window.pollEvent(event)) {
         if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Escape) {
+            switch (event.key.code)
+            {
+            case sf::Keyboard::Escape:
+            case sf::Keyboard::Return:
                 destroyed = true;
-            }
-            else if (event.key.code == sf::Keyboard::Return) {
-                destroyed = true;
+                break;
             }
         }
     }
@@ -42,8 +38,6 @@ GameState* OptionsScreen::update()
 
 void OptionsScreen::draw(sf::RenderWindow &window)
 {
-    for (Button b : buttons) {
-        b.draw(window);
-    }
+    for (Button b : buttons) b.draw(window);
     window.draw(title);
 }

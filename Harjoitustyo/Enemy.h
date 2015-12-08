@@ -3,8 +3,8 @@
 
 #include "SFML/Audio.hpp"
 
-#include "Entity.h"
 #include "Tile.h"
+#include "Entity.h"
 
 class Enemy : public Entity
 {

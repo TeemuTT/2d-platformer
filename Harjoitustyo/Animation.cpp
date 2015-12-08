@@ -11,9 +11,9 @@ Animation::~Animation()
 
 }
 
-Animation::Animation(std::string filename, int images, int w, int h, bool looping)
+Animation::Animation(sf::Texture texture, int images, int w, int h, bool looping)
 {
-    texture.loadFromFile(filename); 
+    this->texture = texture;
 
     for (int i = 0; i < images; ++i) {
         frames.push_back(sf::IntRect(i * w, 0, w, h));

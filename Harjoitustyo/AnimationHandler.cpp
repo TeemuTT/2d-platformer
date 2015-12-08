@@ -16,7 +16,6 @@ void AnimationHandler::update(Entity &entity, int vx, int vy)
 {
     float delta = clock.restart().asSeconds() * 10;
     
-    // Should have at least idle tex/anim. This turns out as white box.
     if (!has_idle) {
         return;
     }
@@ -60,9 +59,9 @@ void AnimationHandler::update(Entity &entity, int vx, int vy, Direction dir)
     entity.setTextureRect(animations.at(dir).getTextureRect(delta, left));
 }
 
-void AnimationHandler::create_animation(std::string filename, int images, int w, int h, Direction dir, bool looping)
+void AnimationHandler::create_animation(sf::Texture texture, int images, int w, int h, Direction dir, bool looping)
 {
-    Animation animation{ filename, images, w, h, looping };
+    Animation animation{ texture, images, w, h, looping };
     animations.emplace(dir, animation);
     
     switch (dir) {

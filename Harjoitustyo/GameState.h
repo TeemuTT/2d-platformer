@@ -4,8 +4,9 @@
 #include <vector>
 
 #include "Game.h"
-#include "Tilemap.h"
 #include "Level.h"
+#include "Tilemap.h"
+#include "AssetManager.h"
 
 class Entity;
 
@@ -22,17 +23,19 @@ public:
     bool isDestroyed();
     void add_entity(Entity* entity);
     
-    std::vector<Entity*> getEntities();
-    std::vector<Tile> getTiles();
     sf::View getView();
     sf::FloatRect getBounds();
+    std::vector<Tile> getTiles();
+    std::vector<Entity*> getEntities();
+    AssetManager* get_asset_manager();
+
 protected:
-    bool destroyed;
     Game* game;
-    std::vector<Entity*> entities;
-    std::vector<Entity*> queue;
     Level level;
     sf::View view;
+    bool destroyed;
+    std::vector<Entity*> queue;
+    std::vector<Entity*> entities;
 };
 
 #endif

@@ -1,12 +1,13 @@
 #ifndef __MAINMENU__
 #define __MAINMENU__
 
-#include <string>
 #include <vector>
-#include "SFML/Graphics.hpp"
-#include "GameState.h"
-#include "Button.h"
+
 #include "SFML/Audio.hpp"
+#include "SFML/Graphics.hpp"
+
+#include "Button.h"
+#include "GameState.h"
 
 class MainMenu : public GameState
 {
@@ -17,12 +18,13 @@ public:
     virtual GameState* update();
     virtual void draw(sf::RenderWindow &window);
 private:
-    int selection{ 0 };
-    std::vector<Button> buttons;
     sf::Font font;
     sf::Text title;
-    sf::Texture texture;
     sf::Music music;
+    sf::Texture texture;
+    sf::RectangleShape borders;
+    std::vector<Button> buttons;
+    int selection{ 0 };
 };
 
 #endif

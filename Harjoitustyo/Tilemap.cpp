@@ -12,12 +12,13 @@ Tilemap::Tilemap()
 bool Tilemap::load(std::string filename)
 {
     //std::string tilepath = "../Debug/";
-    std::string tilepath;
+    std::string tilepath = "maps/";
+    std::string filepath = "maps/" + filename;
     int width, height;
 
     using namespace rapidxml;
     xml_document<> doc;
-    file<> xmlFile(filename.c_str());
+    file<> xmlFile(filepath.c_str());
     doc.parse<0>(xmlFile.data());
     xml_node<> *root = doc.first_node("map");
     xml_attribute<> *pAttr = root->first_attribute("width");
@@ -43,7 +44,7 @@ bool Tilemap::load(std::string filename)
     pAttr = source->first_attribute("source");
     tilepath.append(pAttr->value());
 
-    return load(filename, tilepath, width, height);
+    return load(filepath, tilepath, width, height);
 }
 
 bool Tilemap::load(std::string filepath, std::string tilepath, int width, int height)

@@ -6,6 +6,7 @@ Entity::Entity(int x, int y, GameState* gamestate)
 {
     this->x = x;
     this->y = y;
+    rect.setPosition(x, y);
     this->gamestate = gamestate;
 }
 

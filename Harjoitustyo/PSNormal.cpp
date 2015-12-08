@@ -1,9 +1,9 @@
 
 #include "Enemy.h"
 #include "Player.h"
-#include "PSNormal.h"
 #include "Bullet.h"
 #include "PSDead.h"
+#include "PSNormal.h"
 #include "PSSprint.h"
 #include "GameScreen.h"
 

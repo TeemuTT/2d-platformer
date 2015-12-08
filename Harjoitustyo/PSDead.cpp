@@ -21,5 +21,6 @@ PlayerState* PSDead::update(float &delta)
     if (waittime >= 2) {
         player->destroy();
     }
+    player->animation.update(*player, 0, 0, AnimationHandler::DEAD);
     return nullptr;
 }

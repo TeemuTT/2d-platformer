@@ -7,16 +7,13 @@
 Enemy::Enemy(int x, int y, float sizex, float sizey, GameState* gamestate) : Entity(x, y, gamestate)
 {
     rect.setSize(sf::Vector2f(sizex, sizey));
-    rect.setPosition(x, y);
     start_x = x;
     start_y = y;
-    hitpoints = 3;
 
-    animation.create_animation("zappy.png", 4, 50, 50, AnimationHandler::IDLE, true);
+    animation.create_animation(gamestate->get_asset_manager()->getTexture("zappy"), 4, 50, 50, AnimationHandler::IDLE, true);
     animation.update(*this, 0, 0, AnimationHandler::IDLE);
 
-    soundBuf.loadFromFile("hit.wav");
-    hitsound.setBuffer(soundBuf);
+    hitsound.setBuffer(gamestate->get_asset_manager()->getSound("enemy_hit"));
 }
 
 Enemy::~Enemy()
@@ -50,8 +47,8 @@ void Enemy::update(float &delta)
     x += x_vel;
     if (std::abs(x - start_x) > 10) x_vel *= -1;
 
-    animation.update(*this, 0, 0);
     rect.setPosition(x, y);
+    animation.update(*this, 0, 0);
 }
 
 void Enemy::draw(sf::RenderWindow &window)

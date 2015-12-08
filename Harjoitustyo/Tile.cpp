@@ -8,3 +8,28 @@ Tile::Tile(int x, int y)
     rect.setOutlineColor(sf::Color::Red);
     rect.setFillColor(sf::Color::Transparent);
 }
+
+sf::RectangleShape Tile::getShape()
+{
+    return rect;
+}
+
+int Tile::left()
+{
+    return rect.getPosition().x;
+}
+
+int Tile::top()
+{
+    return rect.getPosition().y;
+}
+
+int Tile::right()
+{
+    return rect.getPosition().x + rect.getSize().x;
+}
+
+int Tile::bottom()
+{
+    return rect.getPosition().y + rect.getSize().y;
+}

@@ -1,8 +1,9 @@
 #ifndef __EXPLOSION__
 #define __EXPLOSION__
 
-#include "Entity.h"
 #include "SFML/Audio.hpp"
+
+#include "Entity.h"
 
 class Explosion : public Entity
 {

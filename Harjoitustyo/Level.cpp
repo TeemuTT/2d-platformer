@@ -20,20 +20,18 @@ Level::~Level()
 
 }
 
-/*
-Load file which contains filepaths of the levels tilemaps. Push the filepaths to a vector
-which is used to load the tilemaps in order.
-*/
+// Load file which contains filepaths of the levels tilemaps. Push the filepaths to a vector
+// which is used to load the tilemaps in order.
 bool Level::load()
 {
-    std::ifstream file(filename + ".txt");
+    std::ifstream file("maps/" + filename + ".dat", std::ios::binary);
     std::string line;
     if (file.is_open()) {
         while (std::getline(file, line)) {
             tilemaps.push_back(line);
         }
     }
-    return map.load(tilemaps.at(current));    
+    return map.load(tilemaps.at(current));
 }
 
 void Level::clear()
@@ -71,9 +69,7 @@ Tilemap* Level::getMap()
     return &map;
 }
 
-/*
-Load the next tilemap.
-*/
+//Load the next tilemap.
 bool Level::transition()
 {
     if (++current >= tilemaps.size()) {
@@ -82,27 +78,23 @@ bool Level::transition()
     return map.load(tilemaps.at(current));
 }
 
-/*
-Check whether this was the last tilemap of the level.
-*/
+// Check whether this was the last tilemap of the level.
 bool Level::hasNext()
 {
     if (current + 1 >= tilemaps.size()) return false;
     else return true;
 }
 
-/*
-Read level data such as enemy positions from [levelname]_data.txt and return vector.
-*/
+// Read level data such as enemy positions from [levelname]_data.txt and return vector.
 std::vector<std::pair<int, int>> Level::getEnemyPositions()
 {
     std::vector < std::pair<int, int> > positions;
 
     // Create filepath.
-    std::string path = tilemaps.at(current);
-    path = path.substr(0, path.find(".tmx")).append("_data.txt");
+    std::string path = "maps/" + tilemaps.at(current);
+    path = path.substr(0, path.find(".tmx")).append("_data.dat");
 
-    std::ifstream level_data(path);
+    std::ifstream level_data(path, std::ios::binary);
     if (level_data.is_open()) {
         int x, y;
         while (level_data >> x) {

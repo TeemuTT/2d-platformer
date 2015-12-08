@@ -1,9 +1,7 @@
 
-#include <iostream>
-
-#include "Constants.h"
 #include "Game.h"
 #include "GameState.h"
+#include "Constants.h"
 
 Game::Game()
 {
@@ -11,7 +9,6 @@ Game::Game()
     window.setFramerateLimit(FPSLIMIT);
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
-    //std::cout << "view: " << window.getView().getViewport().left << ", " << window.getView().getViewport().left << std::endl;
 }
 
 Game::~Game()
@@ -19,7 +16,6 @@ Game::~Game()
     while (states.size() != 0) {
         pop_state();
     }
-    std::cout << "Game destroyed\n";
 }
 
 void Game::push_state(GameState* state)
@@ -33,7 +29,7 @@ void Game::pop_state()
     states.pop();
 }
 
-GameState* Game::peek()
+GameState* Game::top()
 {
     if (!states.empty()) return states.top();
     return nullptr;
@@ -43,7 +39,7 @@ void Game::run()
 {
     while (window.isOpen()) {
 
-        GameState* state = peek();
+        GameState* state = top();
         if (state == nullptr) {
             window.close();
             break;
@@ -53,11 +49,11 @@ void Game::run()
             continue;
         }
         
-        GameState *state_ = state->update();
+        GameState *new_state = state->update();
         
-        if (state_ != nullptr) {
+        if (new_state != nullptr) {
             pop_state();
-            push_state(state_);
+            push_state(new_state);
             continue;
         }
 
@@ -80,4 +76,9 @@ void Game::reset_view()
 sf::Window* Game::get_window()
 {
     return &window;
+}
+
+AssetManager* Game::get_asset_manager()
+{
+    return &asset_manager;
 }

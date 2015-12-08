@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationHandler.cpp" />
+    <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -146,10 +147,10 @@
     <ClCompile Include="PSNormal.cpp" />
     <ClCompile Include="PSSprint.cpp" />
     <ClCompile Include="PSTransition.cpp" />
-    <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Tilemap.cpp" />
     <ClCompile Include="TransitionState.cpp" />
+    <ClCompile Include="Utilities.cpp" />
     <ClCompile Include="WinState.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +159,7 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="AnimationHandler.h" />
+    <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Bullet.h">
       <SubType>
       </SubType>
@@ -186,10 +188,10 @@
     <ClInclude Include="PSNormal.h" />
     <ClInclude Include="PSSprint.h" />
     <ClInclude Include="PSTransition.h" />
-    <ClInclude Include="Rectangle.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Tilemap.h" />
     <ClInclude Include="TransitionState.h" />
+    <ClInclude Include="Utilities.h" />
     <ClInclude Include="WinState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

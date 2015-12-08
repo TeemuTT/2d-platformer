@@ -6,11 +6,10 @@ Explosion::Explosion(int x, int y, GameState *gamestate) : Entity(x, y, gamestat
     rect.setSize(sf::Vector2f(64, 64));
     rect.setPosition(sf::Vector2f(x, y));
 
-    animation.create_animation("explosion.png", 13, 98, 95, AnimationHandler::IDLE, false);
+    animation.create_animation(gamestate->get_asset_manager()->getTexture("explosion"), 13, 98, 95, AnimationHandler::IDLE, false);
     animation.update(*this, 0, 0);
 
-    soundBuf.loadFromFile("explosion.wav");
-    sound.setBuffer(soundBuf);
+    sound.setBuffer(gamestate->get_asset_manager()->getSound("explosion"));
     sound.play();
 }
 
