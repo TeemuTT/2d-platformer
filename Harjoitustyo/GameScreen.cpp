@@ -92,7 +92,7 @@ GameState* GameScreen::update()
     }
 
     sf::Event event;
-    while (game->window.pollEvent(event))
+    while (game->get_window().pollEvent(event))
         if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
             game->push_state(new PauseState(game, this));
 
