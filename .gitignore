@@ -228,8 +228,7 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
-*.dat
+*.png
+*.wav
 *.dat
 *.tmx
-*.dat
-*.dat
