@@ -14,7 +14,7 @@ class AnimationHandler
 {
 public:
     enum Direction {
-        RUN, JUMP, IDLE, SPRINT
+        RUN, JUMP, IDLE, SPRINT, DEAD
     };
 
     AnimationHandler();
@@ -23,7 +23,7 @@ public:
     void update(Entity &entity, int vx, int vy);
     void update(Entity &entity, int vx, int vy, Direction dir);
 
-    void create_animation(std::string filename, int images, int w, int h, Direction dir, bool looping);
+    void create_animation(sf::Texture texture, int images, int w, int h, Direction dir, bool looping);
         
 private:
     bool has_run{ false };

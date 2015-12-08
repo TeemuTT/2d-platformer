@@ -1,6 +1,5 @@
 
 #include "Game.h"
-#include "GameScreen.h"
 #include "MainMenu.h"
 
 int main()

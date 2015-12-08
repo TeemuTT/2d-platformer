@@ -5,12 +5,11 @@ Bullet::Bullet(int x, int y, sf::Vector2f velocity, GameState* gamestate) : Enti
 {
     this->velocity = velocity;
     rect.setSize(sf::Vector2f(12, 12));
-    rect.setPosition(sf::Vector2f(x, y));
 
-    animation.create_animation("bullet.png", 1, 15, 15, AnimationHandler::IDLE, false);
+    animation.create_animation(gamestate->get_asset_manager()->getTexture("bullet"), 1, 15, 15, AnimationHandler::IDLE, false);
     animation.update(*this, 0, 0);
 
-    tiles = gamestate->getTiles(); // Ehkä ei näin.
+    tiles = gamestate->getTiles();
 }
 
 Bullet::~Bullet()
@@ -20,7 +19,6 @@ Bullet::~Bullet()
 
 void Bullet::update(float &delta)
 {
-    // Move.
     x += velocity.x;
     y += velocity.y;
     rect.setPosition(x, y);

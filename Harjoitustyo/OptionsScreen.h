@@ -3,9 +3,11 @@
 
 
 #include <vector>
+
 #include "SFML/Graphics.hpp"
-#include "GameState.h"
+
 #include "Button.h"
+#include "GameState.h"
 
 class OptionsScreen : public GameState
 {
@@ -16,11 +18,11 @@ public:
     virtual GameState* update();
     virtual void draw(sf::RenderWindow &window);
 private:
-    int selection{ 0 };
-    std::vector<Button> buttons;
     sf::Font font;
     sf::Text title;
     sf::Texture texture;
+    std::vector<Button> buttons;
+    int selection{ 0 };
 };
 
 #endif

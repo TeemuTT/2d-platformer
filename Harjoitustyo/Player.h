@@ -1,16 +1,20 @@
 #ifndef __PLAYER__
 #define __PLAYER__
 
-#include "PlayerState.h"
-#include "Entity.h"
-#include "Tile.h"
 #include "SFML\Audio.hpp"
+
+#include "Tile.h"
+#include "Entity.h"
+#include "PlayerState.h"
 
 class Player : public Entity
 {
-    friend class PSNormal;
+    // Friend PlayerStates.
     friend class PSDead;
+    friend class PSDemo;
+    friend class PSNormal;
     friend class PSSprint;
+    friend class PSTransition;
 public:
     Player(int x, int y, float sizex, float sizey, GameState* gamestate);
     ~Player();
@@ -18,35 +22,33 @@ public:
     virtual void update(float &delta);
     virtual void draw(sf::RenderWindow &window);
 
-    void stop();
+    void transition();
+    void setDemostate();
     void setTiles(std::vector<Tile> tiles);
 private:
-    std::vector<Tile> tiles; // ei näin
     PlayerState *state;
+    std::vector<Tile> tiles;
 
-    // Shouldn't create new buffers in every instance.
-    sf::SoundBuffer shootbuffer;
+    // Sounds should probably be handled by some sort of global manager.
     sf::Sound shootsound;
+    sf::SoundBuffer shootbuffer;
 
-    sf::SoundBuffer hitbuffer;
     sf::Sound hitsound;
+    sf::SoundBuffer hitbuffer;
 
-    sf::SoundBuffer sprintbuffer;
     sf::Sound sprintsound;
+    sf::SoundBuffer sprintbuffer;
 
-    const int SPEED = 4;
-    const float JUMP_FORCE = -10.F;
-    const float GRAVITY = 0.50F;
-    const int BULLET_SPEED = 10;
+    const int SPEED{ 4 };
+    const int BULLET_SPEED{ 10 };
+    const float GRAVITY{ 0.50F };
+    const float JUMP_FORCE{ -10.F };
 
     bool jumptoggled;
-
-    // Shoot testing, remove these
     bool spacetoggled;
-    int dir = 3;
 
-    bool recovering{ false };
     float recoveryclock;
+    bool recovering{ false };
 };
 
 #endif

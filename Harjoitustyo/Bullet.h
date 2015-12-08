@@ -13,7 +13,7 @@ public:
     virtual void draw(sf::RenderWindow &window);
 private:
     sf::Vector2f velocity;
-    std::vector<Tile> tiles; // ei näin
+    std::vector<Tile> tiles;
 };
 
 #endif

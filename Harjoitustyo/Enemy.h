@@ -3,13 +3,13 @@
 
 #include "SFML/Audio.hpp"
 
-#include "Entity.h"
 #include "Tile.h"
+#include "Entity.h"
 
 class Enemy : public Entity
 {
 public:
-    Enemy(int x, int y, float sizex, float sizey, GameState* gamestate);
+    Enemy(int x, int y, float sizex, float sizey, int speed, GameState* gamestate);
     ~Enemy();
 
     virtual void update(float &delta);
@@ -18,6 +18,7 @@ public:
 private:
     int start_x, start_y;
     int y_vel{ 1 };
+    int x_vel{ 1 };
     
     // Shouldn't create new buffers in every instance.
     sf::SoundBuffer soundBuf;

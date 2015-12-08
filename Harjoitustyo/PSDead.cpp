@@ -3,10 +3,11 @@
 
 #include "Player.h"
 #include "PSDead.h"
+#include "Explosion.h"
 
 PSDead::PSDead(Player *player) : PlayerState(player)
 {
-
+    player->gamestate->add_entity(new Explosion(player->x, player->y, player->gamestate));
 }
 
 PSDead::~PSDead()
@@ -20,5 +21,6 @@ PlayerState* PSDead::update(float &delta)
     if (waittime >= 2) {
         player->destroy();
     }
+    player->animation.update(*player, 0, 0, AnimationHandler::DEAD);
     return nullptr;
 }

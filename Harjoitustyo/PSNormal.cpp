@@ -1,12 +1,11 @@
 
-#include <iostream>
-
 #include "Enemy.h"
 #include "Player.h"
-#include "PSNormal.h"
 #include "Bullet.h"
 #include "PSDead.h"
+#include "PSNormal.h"
 #include "PSSprint.h"
+#include "GameScreen.h"
 
 PSNormal::PSNormal(Player *player) : PlayerState(player)
 {
@@ -15,14 +14,14 @@ PSNormal::PSNormal(Player *player) : PlayerState(player)
 
 PSNormal::~PSNormal()
 {
-    std::cout << "PSNormal stop\n";
+
 }
 
 PlayerState* PSNormal::update(float &delta)
 {
     handle_input();
 
-    // Handle PSSlide here. Could make handle_input() return PlayerState*, but it's not worth it currently.
+    // Handle PSSprint here. Could make handle_input() return PlayerState*, but it's not worth it currently.
     slide_timer += delta;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::K) && slide_timer >= SLIDE_COOLDOWN) {
         slide_timer = 0;
@@ -33,6 +32,9 @@ PlayerState* PSNormal::update(float &delta)
     }
 
     handle_vertical();
+    if (!player->gamestate->getBounds().intersects(player->getBounds())) {
+        return new PSDead(player);
+    }
     
     for (Entity *e : player->gamestate->getEntities()) {
         if (Enemy *enemy = dynamic_cast<Enemy*>(e)) {
@@ -44,6 +46,7 @@ PlayerState* PSNormal::update(float &delta)
                 }
                 player->rect.setFillColor(sf::Color(230, 50, 0));
                 player->recovering = true;
+                dynamic_cast<GameScreen*>(player->gamestate)->change_score(-140);
             }
         }
     }
@@ -58,16 +61,13 @@ PlayerState* PSNormal::update(float &delta)
     }
 
     player->rect.setPosition(player->x, player->y);
-    //player->animation.update(*player);
     player->animation.update(*player, player->vx, player->vy);
 
-    std::cout << "player at " << player->x << ", " << player->y << "\n";
     return nullptr;
 }
 
 void PSNormal::handle_vertical()
 {
-    //auto &tiles = player->gamestate->getTiles(); // ei näin
     player->vy += player->GRAVITY;
 
     if (player->vy < 0) {
@@ -106,11 +106,10 @@ void PSNormal::handle_vertical()
 
 void PSNormal::handle_input()
 {
-    auto &tiles = player->gamestate->getTiles(); // ei näin
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
         player->vx = -player->SPEED;
         int maxpixels = INT_MIN;
-        for (Tile t : tiles) {
+        for (Tile t : player->tiles) {
             if (t.bottom() <= player->top()) continue;
             if (t.top() >= player->bottom()) continue;
             if (t.left() >= player->right()) continue;
@@ -118,12 +117,13 @@ void PSNormal::handle_input()
             if (distance > maxpixels) maxpixels = distance;
         }
         player->x += std::max((int)player->vx, maxpixels);
-        player->heading = -1; // tmp for shooting
+        player->rect.setPosition(player->x, player->y);
+        player->heading = -1;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
         player->vx = player->SPEED;
         int maxpixels = INT_MAX;
-        for (Tile t : tiles) {
+        for (Tile t : player->tiles) {
             if (t.bottom() <= player->top()) continue;
             if (t.top() >= player->bottom()) continue;
             if (t.right() <= player->left()) continue;
@@ -131,7 +131,8 @@ void PSNormal::handle_input()
             if (distance < maxpixels) maxpixels = distance;
         }
         player->x += std::min((int)player->vx, maxpixels);
-        player->heading = 1; // tmp for shooting
+        player->rect.setPosition(player->x, player->y);
+        player->heading = 1;
     }
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) player->vx = 0;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) player->vx = 0;
@@ -144,13 +145,13 @@ void PSNormal::handle_input()
     }
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) player->jumptoggled = true;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && player->spacetoggled) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::J) && player->spacetoggled) {
         int bx = player->getOrigin().x + player->heading * player->rect.getSize().x - 4; // magic number: bullet width
         int by = player->getOrigin().y;
         player->gamestate->add_entity(new Bullet(bx, by, sf::Vector2f(player->heading * player->BULLET_SPEED, 0), player->gamestate));
         player->spacetoggled = false;
         player->shootsound.play();
     }
-    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)) player->spacetoggled = true;
+    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::J)) player->spacetoggled = true;
 
 }

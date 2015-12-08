@@ -75,6 +75,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Users\Teemu\Documents\SFML-Visual_Studio2015RCx32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -100,12 +101,14 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Users\Teemu\Documents\SFML-Visual_Studio2015RCx32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SFML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>C:\Users\Teemu\Documents\SFML-Visual_Studio2015RCx32\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-window-s.lib;sfml-system-s.lib;sfml-graphics-s.lib;sfml-audio-s.lib;opengl32.lib;freetype.lib;jpeg.lib;winmm.lib;gdi32.lib;ws2_32.lib;vorbisenc.lib;vorbis.lib;vorbisfile.lib;ogg.lib;flac.lib;openal32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -125,24 +128,33 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationHandler.cpp" />
+    <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="HighscoresScreen.cpp" />
+    <ClCompile Include="Level.cpp" />
+    <ClCompile Include="LevelSelect.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="OptionsScreen.cpp" />
+    <ClCompile Include="PauseState.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PSDead.cpp" />
+    <ClCompile Include="PSDemo.cpp" />
     <ClCompile Include="PSNormal.cpp" />
     <ClCompile Include="PSSprint.cpp" />
-    <ClCompile Include="Rectangle.cpp" />
+    <ClCompile Include="PSTransition.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Tilemap.cpp" />
+    <ClCompile Include="TransitionState.cpp" />
+    <ClCompile Include="Utilities.cpp" />
+    <ClCompile Include="WinState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -150,6 +162,7 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="AnimationHandler.h" />
+    <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Bullet.h">
       <SubType>
       </SubType>
@@ -161,20 +174,28 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="HighscoresScreen.h" />
+    <ClInclude Include="Level.h" />
+    <ClInclude Include="LevelSelect.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="OptionsScreen.h" />
+    <ClInclude Include="PauseState.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerState.h" />
     <ClInclude Include="PSDead.h" />
+    <ClInclude Include="PSDemo.h" />
     <ClInclude Include="PSNormal.h" />
     <ClInclude Include="PSSprint.h" />
-    <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="PSTransition.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Tilemap.h" />
+    <ClInclude Include="TransitionState.h" />
+    <ClInclude Include="Utilities.h" />
+    <ClInclude Include="WinState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

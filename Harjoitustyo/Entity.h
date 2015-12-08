@@ -13,20 +13,23 @@ public:
 
     virtual void update(float &delta) = 0;
     virtual void draw(sf::RenderWindow &window) = 0;
-    
-    sf::Vector2f getPosition();
-    sf::Vector2f getOrigin();
 
-    bool isDestroyed();
+    sf::Vector2f getOrigin();
+    sf::FloatRect getBounds();
+    sf::Vector2f getPosition();
+
     bool isGrounded();
+    bool isDestroyed();
+
     void setPosition(int x, int y);
+    void setPosition(sf::FloatRect pos);
     void setTexture(sf::Texture* texture);
     void setTextureRect(sf::IntRect intrect);
-    bool collision(Entity *entity);
-    void destroy();
+
     void hit();
+    void destroy();
+    bool collision(Entity *entity);
     void updateflash(float &delta);
-    sf::FloatRect getBounds();
 
 protected:
     sf::Texture texture;
@@ -39,7 +42,7 @@ protected:
     float vx, vy;
     float flashclock;
     int heading{ 1 };
-    int hitpoints{ 0 };
+    int hitpoints{ 3 };
     bool grounded{ true };
     bool destroyed{ false };
 
@@ -47,7 +50,6 @@ protected:
     int left();
     int right();
     int bottom();
-
 };
 
 #endif

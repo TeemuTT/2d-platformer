@@ -1,48 +1,48 @@
 
-#include <iostream>
-
+#include "Enemy.h"
 #include "Player.h"
 #include "Bullet.h"
-#include "Enemy.h"
+#include "PSDemo.h"
 #include "PSNormal.h"
+#include "PSTransition.h"
 
 Player::Player(int x, int y, float sizex, float sizey, GameState* gamestate) : Entity(x, y, gamestate)
 {
-    rect.setPosition(x, y);
     rect.setSize(sf::Vector2f(sizex, sizey));
     
-    animation.create_animation("run.png", 10, 38, 38, AnimationHandler::RUN, true);
-    animation.create_animation("idle.png", 1, 38, 38, AnimationHandler::IDLE, false);
-    animation.create_animation("jump.png", 4, 38, 38, AnimationHandler::JUMP, false);
-    animation.create_animation("slide.png", 2, 48, 38, AnimationHandler::SPRINT, false);
+    AssetManager *assets = gamestate->get_asset_manager();
+    animation.create_animation(assets->getTexture("player_run"), 8, 567, 556, AnimationHandler::RUN, true);
+    animation.create_animation(assets->getTexture("player_idle"), 1, 567, 556, AnimationHandler::IDLE, false);
+    animation.create_animation(assets->getTexture("player_jump"), 8, 567, 556, AnimationHandler::JUMP, false);
+    animation.create_animation(assets->getTexture("player_sprint"), 9, 567, 556, AnimationHandler::SPRINT, false);
+    animation.create_animation(assets->getTexture("player_dead"), 9, 567, 556, AnimationHandler::DEAD, false);
+    animation.update(*this, 0, 0, AnimationHandler::IDLE);
 
-    shootbuffer.loadFromFile("shoot.wav");
-    shootsound.setBuffer(shootbuffer);
-
-    hitbuffer.loadFromFile("playerhit.wav");
-    hitsound.setBuffer(hitbuffer);
-
-    sprintbuffer.loadFromFile("slide.wav");
-    sprintsound.setBuffer(sprintbuffer);
-    
-    hitpoints = 3;
+    shootsound.setBuffer(assets->getSound("player_shoot"));
+    hitsound.setBuffer(assets->getSound("player_hit"));
+    sprintsound.setBuffer(assets->getSound("player_sprint"));
 
     state = new PSNormal(this);
 }
 
 Player::~Player()
 {
-    std::cout << "player destructor\n";
     delete state;
 }
 
 
+void Player::setDemostate()
+{
+    delete state;
+    state = new PSDemo(this);
+}
+
 void Player::update(float &delta)
 {
-    PlayerState* state_ = state->update(delta);
-    if (state_ != nullptr) {
+    PlayerState* new_state = state->update(delta);
+    if (new_state != nullptr) {
         delete state;
-        state = state_;
+        state = new_state;
     }
 }
 
@@ -56,11 +56,8 @@ void Player::setTiles(std::vector<Tile> tiles)
     this->tiles = tiles;
 }
 
-void Player::stop()
+void Player::transition()
 {
-    vx = 0;
-    vy = 0;
-    grounded = false;
     delete state;
-    state = new PSNormal(this);
+    state = new PSTransition(this);
 }

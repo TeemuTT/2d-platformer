@@ -10,7 +10,7 @@ class Animation
 {
 public:
     Animation();
-    Animation(std::string filename, int images, int w, int h, bool looping);
+    Animation(sf::Texture texture, int images, int w, int h, bool looping);
     ~Animation();
 
     sf::Texture* getTexture();

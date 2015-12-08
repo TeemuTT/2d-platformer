@@ -1,16 +1,14 @@
 
-#include <iostream>
-
-#include "Constants.h"
 #include "Game.h"
 #include "GameState.h"
+#include "Constants.h"
 
 Game::Game()
 {
     window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), TITLE);
     window.setFramerateLimit(FPSLIMIT);
+    window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
-    //std::cout << "view: " << window.getView().getViewport().left << ", " << window.getView().getViewport().left << std::endl;
 }
 
 Game::~Game()
@@ -18,7 +16,6 @@ Game::~Game()
     while (states.size() != 0) {
         pop_state();
     }
-    std::cout << "Game destroyed\n";
 }
 
 void Game::push_state(GameState* state)
@@ -30,11 +27,9 @@ void Game::pop_state()
 {
     delete states.top();
     states.pop();
-    window.setView(window.getDefaultView());
-    std::cout << "view: " << window.getView().getViewport().left << ", " << window.getView().getViewport().left << std::endl;
 }
 
-GameState* Game::peek()
+GameState* Game::top()
 {
     if (!states.empty()) return states.top();
     return nullptr;
@@ -43,15 +38,8 @@ GameState* Game::peek()
 void Game::run()
 {
     while (window.isOpen()) {
-        //sf::Event event;
-        //while (window.pollEvent(event)) {
-        //    //std::cout << "event: " << event.type << std::endl;
-        //    if (event.type == sf::Event::Closed) {
-        //        window.close();
-        //    }
-        //}
 
-        GameState* state = peek();
+        GameState* state = top();
         if (state == nullptr) {
             window.close();
             break;
@@ -61,11 +49,11 @@ void Game::run()
             continue;
         }
         
-        GameState *state_ = state->update();
+        GameState *new_state = state->update();
         
-        if (state_ != nullptr) {
+        if (new_state != nullptr) {
             pop_state();
-            push_state(state_);
+            push_state(new_state);
             continue;
         }
 
@@ -88,4 +76,9 @@ void Game::reset_view()
 sf::Window* Game::get_window()
 {
     return &window;
+}
+
+AssetManager* Game::get_asset_manager()
+{
+    return &asset_manager;
 }
