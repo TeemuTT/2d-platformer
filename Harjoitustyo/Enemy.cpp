@@ -4,13 +4,15 @@
 #include "Explosion.h"
 #include "GameScreen.h"
 
-Enemy::Enemy(int x, int y, float sizex, float sizey, GameState* gamestate) : Entity(x, y, gamestate)
+Enemy::Enemy(int x, int y, float sizex, float sizey, int speed, GameState* gamestate) : Entity(x, y, gamestate)
 {
     rect.setSize(sf::Vector2f(sizex, sizey));
     start_x = x;
     start_y = y;
 
-    animation.create_animation(gamestate->get_asset_manager()->getTexture("zappy"), 4, 50, 50, AnimationHandler::IDLE, true);
+    y_vel += speed;
+
+    animation.create_animation(gamestate->get_asset_manager()->getTexture("zappy"), 4, 122, 101, AnimationHandler::IDLE, true);
     animation.update(*this, 0, 0, AnimationHandler::IDLE);
 
     hitsound.setBuffer(gamestate->get_asset_manager()->getSound("enemy_hit"));

@@ -26,7 +26,7 @@ MainMenu::MainMenu(Game *game)
     buttons.emplace_back(sf::Vector2f(WINDOW_WIDTH / 4, 260), sf::Vector2f(120, 30), "Quit", font);
     buttons.at(selection).set_focused(true);
 
-    music.openFromFile("sounds/menu.wav");
+    music.openFromFile("sounds/POL-fortress-short.wav");
     music.setVolume(33);
     //music.play();
 

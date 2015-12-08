@@ -14,11 +14,13 @@ GameScreen::GameScreen(Game* game, std::string filename)
     this->game = game;
     this->score = 100;
 
+    std::uniform_int_distribution<int> dist(0, 2);
+
     level = Level(filename);
     level.load();
     auto positions = level.getEnemyPositions();
     for (auto pos : positions)
-        entities.push_back(new Enemy(pos.first, pos.second, 64, 64, this));
+        entities.push_back(new Enemy(pos.first, pos.second, 64, 64, dist(gen), this));
 
     Player *player = new Player(0, 0, 50, 64, this);
     player->setPosition(level.getStart());
@@ -29,7 +31,7 @@ GameScreen::GameScreen(Game* game, std::string filename)
     center_view(player);
     game->set_view(view);
 
-    music.openFromFile("sounds/drwily.wav");
+    music.openFromFile("sounds/Orbital_Colossus.ogg");
     music.setVolume(33);
     music.play();
 
@@ -165,9 +167,10 @@ void GameScreen::transition()
     entities.clear();
     entities.push_back(player);
 
+    std::uniform_int_distribution<int> dist(0, 2);
     std::vector<std::pair<int, int>> positions = level.getEnemyPositions();
     for (auto pos : positions) {
-        entities.push_back(new Enemy(pos.first, pos.second, 64.f, 64.f, this));
+        entities.push_back(new Enemy(pos.first, pos.second, 64.f, 64.f, dist(gen), this));
     }
 }
 

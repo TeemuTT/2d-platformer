@@ -9,7 +9,7 @@
 class Enemy : public Entity
 {
 public:
-    Enemy(int x, int y, float sizex, float sizey, GameState* gamestate);
+    Enemy(int x, int y, float sizex, float sizey, int speed, GameState* gamestate);
     ~Enemy();
 
     virtual void update(float &delta);

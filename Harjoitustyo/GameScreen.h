@@ -2,6 +2,7 @@
 #define __GAMESCREEN__
 
 #include <string>
+#include <random>
 
 #include "SFML/Audio.hpp"
 
@@ -29,6 +30,7 @@ private:
     sf::Clock clock;
     sf::Text scoretext;
     sf::RectangleShape fillRect;
+    std::default_random_engine gen;
 
     int alpha{ 255 }, score;
     float delta, timer;
