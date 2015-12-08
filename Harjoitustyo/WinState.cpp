@@ -46,7 +46,7 @@ GameState* WinState::update()
     fillRect.setFillColor(sf::Color(0, 0, 0, alpha));
 
     sf::Event event;
-    while (game->window.pollEvent(event)) {
+    while (game->get_window().pollEvent(event)) {
         if (event.type == sf::Event::KeyPressed)
             if (event.key.code == sf::Keyboard::Return)
                 return new MainMenu(game);

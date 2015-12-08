@@ -21,7 +21,7 @@ PauseState::~PauseState()
 GameState* PauseState::update()
 {
     sf::Event event;
-    while (game->window.pollEvent(event)) {
+    while (game->get_window().pollEvent(event)) {
         if (event.type == sf::Event::KeyPressed) {
             switch (event.key.code)
             {

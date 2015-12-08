@@ -20,12 +20,12 @@ public:
     GameState* top();
     void set_view(sf::View &view);
     void reset_view();
-    sf::Window* get_window();
-    sf::RenderWindow window;
+    sf::RenderWindow& get_window();
     AssetManager* get_asset_manager();
 private:
-    std::stack<GameState*> states;
+    sf::RenderWindow window;
     AssetManager asset_manager;
+    std::stack<GameState*> states;
 };
 
 #endif

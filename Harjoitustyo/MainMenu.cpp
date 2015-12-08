@@ -49,7 +49,7 @@ GameState* MainMenu::update()
     if (music.getStatus() == sf::Music::Stopped) music.play();
 
     sf::Event event;
-    while (game->window.pollEvent(event)) {
+    while (game->get_window().pollEvent(event)) {
         if (event.type == sf::Event::Closed)  destroyed = true;
         else if (event.type == sf::Event::KeyPressed) {
             switch (event.key.code)

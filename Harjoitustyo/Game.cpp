@@ -73,9 +73,9 @@ void Game::reset_view()
     window.setView(window.getDefaultView());
 }
 
-sf::Window* Game::get_window()
+sf::RenderWindow& Game::get_window()
 {
-    return &window;
+    return window;
 }
 
 AssetManager* Game::get_asset_manager()
